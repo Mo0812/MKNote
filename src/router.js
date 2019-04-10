@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home";
-import Note from "./views/Note";
+import Notes from "./views/Notes";
 
 Vue.use(Router);
 
@@ -11,13 +10,8 @@ export default new Router({
     routes: [
         {
             path: "/",
-            name: "note",
-            component: Note
-        },
-        {
-            path: "/home",
-            name: "home",
-            component: Home
+            name: "notes",
+            component: Notes
         },
         {
             path: "/about",
@@ -27,6 +21,11 @@ export default new Router({
             // which is lazy-loaded when the route is visited.
             component: () =>
                 import(/* webpackChunkName: "about" */ "./views/About.vue")
+        },
+        {
+            path: "/settings",
+            name: "settings",
+            component: () => import("./views/Settings.vue")
         }
     ]
 });

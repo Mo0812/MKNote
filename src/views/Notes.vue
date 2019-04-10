@@ -7,7 +7,7 @@
 import NoteView from "@/components/NoteView/NoteView";
 
 export default {
-    name: "note",
+    name: "notes",
     components: {
         NoteView
     }

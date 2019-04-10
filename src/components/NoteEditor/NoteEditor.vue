@@ -10,6 +10,8 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown";
 import "codemirror/theme/darcula.css";
 
+import "./NoteEditor.scss";
+
 export default {
     name: "NoteEditor",
     data() {

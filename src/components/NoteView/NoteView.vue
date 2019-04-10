@@ -1,13 +1,13 @@
 <template>
     <b-container class="note-view" fluid>
         <b-row>
-            <b-col cols="4">
+            <b-col cols="2">
                 <NoteTree/>
             </b-col>
-            <b-col cols="4">
+            <b-col cols="5">
                 <NoteEditor/>
             </b-col>
-            <b-col cols="4">
+            <b-col cols="5">
                 <NotePreview/>
             </b-col>
         </b-row>

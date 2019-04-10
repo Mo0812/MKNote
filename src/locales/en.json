@@ -1,0 +1,16 @@
+{
+    "navbar": {
+        "notes": "Notes",
+        "snippets": "Snippets",
+        "about": "About",
+        "user": "User",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Sign Out"
+    },
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "displaySize": "Display size"
+    }
+}

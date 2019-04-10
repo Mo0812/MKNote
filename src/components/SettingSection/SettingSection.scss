@@ -1,0 +1,7 @@
+article.setting-section {
+    border-bottom: 1px solid $bgBorder;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+}

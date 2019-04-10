@@ -1,7 +1,5 @@
 <template>
-    <main>
-        <NoteView/>
-    </main>
+    <NoteView/>
 </template>
 
 <script>

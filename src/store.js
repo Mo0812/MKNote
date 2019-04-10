@@ -4,11 +4,26 @@ import VuexPersist from "vuex-persist";
 
 Vue.use(Vuex);
 
-const state = {};
-const defaultState = state;
-const getters = {};
-const mutations = {};
-const actions = {};
+const state = {
+    note: {
+        value: ""
+    }
+};
+// const defaultState = state;
+const getters = {
+    getNote: state => state.note
+};
+const mutations = {
+    NOTE_VALUE: (state, payload) => {
+        var note = state.note;
+        note.value = payload.value;
+    }
+};
+const actions = {
+    note_value: (context, payload) => {
+        context.commit("NOTE_VALUE", payload);
+    }
+};
 
 const vuexPersist = new VuexPersist({
     key: "mk-notes",

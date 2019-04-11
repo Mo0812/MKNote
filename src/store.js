@@ -8,9 +8,7 @@ import i18n from "./i18n";
 Vue.use(Vuex);
 
 const state = {
-    note: {
-        value: ""
-    },
+    noteIdOpen: "",
     notes: [],
     settings: {
         lang: process.env.VUE_APP_I18N_LOCALE,
@@ -19,14 +17,21 @@ const state = {
 };
 // const defaultState = state;
 const getters = {
-    getNote: state => state.note,
+    getNoteIdOpen: state => state.noteIdOpen,
+    getNoteOpen: state => {
+        return state.notes.find(element => element.id === state.noteIdOpen);
+    },
     getNotes: state => state.notes,
     getSettings: state => state.settings
 };
 const mutations = {
-    NOTE_VALUE: (state, payload) => {
-        var note = state.note;
+    NOTE_UPDATE: (state, payload) => {
+        const notes = state.notes;
+        var note = notes.find(element => element.id === payload.id);
         note.value = payload.value;
+    },
+    NOTE_OPEN: (state, payload) => {
+        state.noteIdOpen = payload;
     },
     NOTE_ADD: (state, payload) => {
         var notes = state.notes;
@@ -44,8 +49,11 @@ const mutations = {
     }
 };
 const actions = {
-    note_value: (context, payload) => {
-        context.commit("NOTE_VALUE", payload);
+    updateNote: (context, payload) => {
+        context.commit("NOTE_UPDATE", payload);
+    },
+    openNote: (context, payload) => {
+        context.commit("NOTE_OPEN", payload);
     },
     addNote: (context, payload) => {
         const newId = shortid.generate();

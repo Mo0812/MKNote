@@ -17,12 +17,14 @@ export default {
     data() {
         return {
             editor: null,
-            editorValue: ""
+            editorValue: "",
+            currentNoteId: ""
         };
     },
     computed: {
         noteValue() {
-            const note = this.$store.getters.getNote;
+            const note = this.$store.getters.getNoteOpen;
+            this.currentNoteId = note.id;
             return note.value;
         }
     },
@@ -37,7 +39,8 @@ export default {
         this.editor.on("change", editor => {
             const currentValue = editor.getValue();
             scope.editorValue = currentValue;
-            scope.$store.dispatch("note_value", {
+            scope.$store.dispatch("updateNote", {
+                id: this.currentNoteId,
                 value: currentValue
             });
         });

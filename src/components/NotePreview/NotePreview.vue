@@ -13,7 +13,7 @@ export default {
     },
     computed: {
         noteValue() {
-            const note = this.$store.getters.getNote;
+            const note = this.$store.getters.getNoteOpen;
             return this.converter.makeHtml(note.value);
         }
     },

@@ -1,6 +1,6 @@
 <template>
     <section class="note-editor">
-        <textarea id="md-textarea" ref="mdtextarea">{{noteValue}}</textarea>
+        <textarea id="md-textarea" ref="mdtextarea">{{note.value}}</textarea>
     </section>
 </template>
 
@@ -17,15 +17,15 @@ export default {
     data() {
         return {
             editor: null,
-            editorValue: "",
             currentNoteId: ""
         };
     },
     computed: {
-        noteValue() {
+        note() {
             const note = this.$store.getters.getNoteOpen;
+            this.refreshEditor(note);
             this.currentNoteId = note.id;
-            return note.value;
+            return note;
         }
     },
     mounted() {
@@ -38,12 +38,19 @@ export default {
         var scope = this;
         this.editor.on("change", editor => {
             const currentValue = editor.getValue();
-            scope.editorValue = currentValue;
             scope.$store.dispatch("updateNote", {
-                id: this.currentNoteId,
+                id: this.note.id,
                 value: currentValue
             });
         });
+    },
+    methods: {
+        refreshEditor(note) {
+            if (this.currentNoteId !== note.id && this.editor !== null) {
+                this.editor.setValue(note.value);
+                this.editor.refresh();
+            }
+        }
     }
 };
 </script>

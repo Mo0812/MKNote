@@ -1,0 +1,11 @@
+.note-tree {
+    .note-tree-item {
+        cursor: pointer;
+
+        .excerpt {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

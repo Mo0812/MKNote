@@ -1,7 +1,7 @@
 <template>
     <aside class="note-tree">
-        <NoteTreeToolbar @add="add"/>
-        <b-list-group>
+        <NoteTreeToolbar @add="add" @changeView="changeView"/>
+        <b-list-group class="note-tree-list">
             <b-list-group-item
                 v-for="note in notes"
                 class="note-tree-item flex-column align-items-start"
@@ -14,6 +14,9 @@
                     <small>3 days ago</small>
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
+                <footer>
+                    <b-button variant="danger" size="sm" @click="remove(note.id)">Löschen</b-button>
+                </footer>
             </b-list-group-item>
         </b-list-group>
     </aside>
@@ -45,6 +48,9 @@ export default {
         },
         remove(id) {
             this.$store.dispatch("removeNote", id);
+        },
+        changeView(checked) {
+            this.$emit("changeView", checked);
         }
     }
 };

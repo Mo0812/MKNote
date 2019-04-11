@@ -1,11 +1,24 @@
 .note-tree {
-    .note-tree-item {
-        cursor: pointer;
+    .note-tree-list {
+        height: 100%;
+        max-height: 80vh;
+        overflow: scroll;
+        .note-tree-item {
+            cursor: pointer;
+            border-radius: 0 !important;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 0;
 
-        .excerpt {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            &:first-of-type {
+                border-top: 0;
+            }
+
+            .excerpt {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 }

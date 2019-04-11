@@ -1,17 +1,15 @@
 <template>
-    <b-container class="note-view" fluid>
-        <b-row>
-            <b-col cols="2">
-                <NoteTree/>
-            </b-col>
-            <b-col cols="5">
-                <NoteEditor/>
-            </b-col>
-            <b-col cols="5">
-                <NotePreview/>
-            </b-col>
-        </b-row>
-    </b-container>
+    <b-row class="h-100">
+        <b-col cols="2" class="h-100 pr-0">
+            <NoteTree/>
+        </b-col>
+        <b-col cols="5" class="pl-0">
+            <NoteEditor/>
+        </b-col>
+        <b-col cols="5">
+            <NotePreview/>
+        </b-col>
+    </b-row>
 </template>
 
 <script>

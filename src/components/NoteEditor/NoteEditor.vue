@@ -1,5 +1,5 @@
 <template>
-    <section class="note-editor">
+    <section class="note-editor h-100">
         <textarea v-if="note" id="md-textarea" ref="mdtextarea">{{note.value}}</textarea>
         <h2 v-else>Wählen Sie zuerst eine Notiz aus oder erstellen Sie eine neue Notiz</h2>
     </section>

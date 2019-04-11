@@ -1,10 +1,12 @@
 <template>
-    <div id="app">
+    <div id="app" class="d-flex flex-column">
         <header>
             <Navbar/>
         </header>
-        <main>
-            <router-view/>
+        <main class="flex-fill">
+            <b-container class="h-100" fluid>
+                <router-view/>
+            </b-container>
         </main>
     </div>
 </template>

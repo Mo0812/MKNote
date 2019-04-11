@@ -8,7 +8,7 @@ import shortid from "shortid";
 Vue.use(Vuex);
 
 const state = {
-    noteIdOpen: "",
+    noteIdOpen: null,
     notes: [],
     settings: {
         lang: process.env.VUE_APP_I18N_LOCALE || "en",

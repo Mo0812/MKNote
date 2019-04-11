@@ -14,7 +14,10 @@ export default {
     computed: {
         noteValue() {
             const note = this.$store.getters.getNoteOpen;
-            return this.converter.makeHtml(note.value);
+            if (note) {
+                return this.converter.makeHtml(note.value);
+            }
+            return null;
         }
     },
     created() {

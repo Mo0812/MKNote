@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
 import shortid from "shortid";
 
-import i18n from "./i18n";
+//import i18n from "./i18n";
 
 Vue.use(Vuex);
 
@@ -11,7 +11,7 @@ const state = {
     noteIdOpen: "",
     notes: [],
     settings: {
-        lang: process.env.VUE_APP_I18N_LOCALE,
+        lang: process.env.VUE_APP_I18N_LOCALE || "en",
         size: ""
     }
 };
@@ -67,7 +67,6 @@ const actions = {
         context.commit("NOTE_REMOVE", payload);
     },
     settings: (context, payload) => {
-        i18n.locale = payload.lang;
         context.commit("SETTINGS", payload);
     }
 };

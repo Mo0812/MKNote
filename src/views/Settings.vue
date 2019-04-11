@@ -59,6 +59,16 @@ export default {
             }
         };
     },
+    watch: {
+        settings: {
+            handler(newSettings, oldSettings) {
+                if (newSettings.lang === oldSettings.lang) {
+                    this.$i18n.locale = newSettings.lang;
+                }
+            },
+            deep: true
+        }
+    },
     created() {
         this.getSettings();
     },

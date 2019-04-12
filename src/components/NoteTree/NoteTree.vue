@@ -33,7 +33,8 @@ export default {
     },
     computed: {
         noteIdOpen() {
-            return this.$store.getters.getNoteIdOpen;
+            const noteView = this.$store.getters.getNoteView;
+            return noteView.openId;
         },
         notes() {
             return this.$store.getters.getNotes;

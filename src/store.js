@@ -8,9 +8,9 @@ import shortid from "shortid";
 Vue.use(Vuex);
 
 const state = {
-    noteIdOpen: null,
     noteView: {
-        viewMode: "both"
+        viewMode: "both",
+        openId: null
     },
     notes: [],
     settings: {
@@ -21,9 +21,10 @@ const state = {
 // const defaultState = state;
 const getters = {
     getNoteView: state => state.noteView,
-    getNoteIdOpen: state => state.noteIdOpen,
     getNoteOpen: state => {
-        return state.notes.find(element => element.id === state.noteIdOpen);
+        return state.notes.find(
+            element => element.id === state.noteView.openId
+        );
     },
     getNotes: state => state.notes,
     getSettings: state => state.settings
@@ -39,7 +40,7 @@ const mutations = {
         note.value = payload.value;
     },
     NOTE_OPEN: (state, payload) => {
-        state.noteIdOpen = payload;
+        state.noteView.openId = payload;
     },
     NOTE_ADD: (state, payload) => {
         var notes = state.notes;

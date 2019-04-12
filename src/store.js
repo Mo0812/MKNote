@@ -9,6 +9,9 @@ Vue.use(Vuex);
 
 const state = {
     noteIdOpen: null,
+    noteView: {
+        viewMode: "both"
+    },
     notes: [],
     settings: {
         lang: process.env.VUE_APP_I18N_LOCALE || "en",
@@ -17,6 +20,7 @@ const state = {
 };
 // const defaultState = state;
 const getters = {
+    getNoteView: state => state.noteView,
     getNoteIdOpen: state => state.noteIdOpen,
     getNoteOpen: state => {
         return state.notes.find(element => element.id === state.noteIdOpen);
@@ -25,6 +29,10 @@ const getters = {
     getSettings: state => state.settings
 };
 const mutations = {
+    NOTE_VIEW_MODE: (state, payload) => {
+        var noteView = state.noteView;
+        noteView.viewMode = payload;
+    },
     NOTE_UPDATE: (state, payload) => {
         const notes = state.notes;
         var note = notes.find(element => element.id === payload.id);
@@ -49,6 +57,9 @@ const mutations = {
     }
 };
 const actions = {
+    changeNoteView: (context, payload) => {
+        context.commit("NOTE_VIEW_MODE", payload);
+    },
     updateNote: (context, payload) => {
         context.commit("NOTE_UPDATE", payload);
     },

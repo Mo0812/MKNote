@@ -11,11 +11,10 @@
         <b-button-group size="sm">
             <b-form-radio-group
                 id="btn-radios-1"
-                v-model="view.selected"
+                v-model="viewSelected"
                 :options="view.options"
                 buttons
                 name="radios-btn-default"
-                @change="changeView"
             ></b-form-radio-group>
         </b-button-group>
     </b-button-toolbar>
@@ -29,7 +28,6 @@ export default {
     data() {
         return {
             view: {
-                selected: "both",
                 options: [
                     { text: "Md", value: "md" },
                     { text: "Prev", value: "preview" },
@@ -38,12 +36,20 @@ export default {
             }
         };
     },
+    computed: {
+        viewSelected: {
+            get() {
+                const noteView = this.$store.getters.getNoteView;
+                return noteView.viewMode;
+            },
+            set(value) {
+                this.$store.dispatch("changeNoteView", value);
+            }
+        }
+    },
     methods: {
         add() {
             this.$emit("add");
-        },
-        changeView(checked) {
-            this.$emit("changeView", checked);
         }
     }
 };

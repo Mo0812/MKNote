@@ -1,6 +1,6 @@
 <template>
     <aside class="note-tree">
-        <NoteTreeToolbar @add="add" @changeView="changeView"/>
+        <NoteTreeToolbar @add="add"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
                 v-for="note in notes"
@@ -48,9 +48,6 @@ export default {
         },
         remove(id) {
             this.$store.dispatch("removeNote", id);
-        },
-        changeView(checked) {
-            this.$emit("changeView", checked);
         }
     }
 };

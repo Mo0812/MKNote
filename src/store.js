@@ -22,9 +22,13 @@ const state = {
 const getters = {
     getNoteView: state => state.noteView,
     getNoteOpen: state => {
-        return state.notes.find(
+        const note = state.notes.find(
             element => element.id === state.noteView.openId
         );
+        if (typeof note !== "undefined") {
+            return note;
+        }
+        return null;
     },
     getNotes: state => state.notes,
     getSettings: state => state.settings
@@ -40,7 +44,13 @@ const mutations = {
         note.value = payload.value;
     },
     NOTE_OPEN: (state, payload) => {
-        state.noteView.openId = payload;
+        const notes = state.notes;
+        var note = notes.find(element => element.id === payload);
+        if (typeof note !== "undefined") {
+            state.noteView.openId = payload;
+        } else {
+            state.noteView.openId = null;
+        }
     },
     NOTE_ADD: (state, payload) => {
         var notes = state.notes;

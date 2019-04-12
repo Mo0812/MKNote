@@ -1,6 +1,8 @@
 <template>
     <section class="note-editor h-100">
-        <textarea v-if="note" id="md-textarea" ref="mdtextarea">{{note.value}}</textarea>
+        <div v-if="note" class="note-editor-container h-100">
+            <textarea id="md-textarea" ref="mdtextarea">{{note.value}}</textarea>
+        </div>
         <h2 v-else>Wählen Sie zuerst eine Notiz aus oder erstellen Sie eine neue Notiz</h2>
     </section>
 </template>
@@ -24,7 +26,7 @@ export default {
     computed: {
         note() {
             const note = this.$store.getters.getNoteOpen;
-            if (note) {
+            if (note !== null) {
                 this.refreshEditor(note);
                 this.currentNoteId = note.id;
                 return note;
@@ -40,11 +42,13 @@ export default {
     updated() {
         if (this.note) {
             this.initEditor();
+        } else {
+            this.removeEditor();
         }
     },
     methods: {
         initEditor() {
-            if (this.editor === null) {
+            if (!this.editor) {
                 const mdTextarea = this.$refs.mdtextarea;
                 this.editor = CodeMirror.fromTextArea(mdTextarea, {
                     mode: "markdown",
@@ -65,6 +69,13 @@ export default {
             if (this.currentNoteId !== note.id && this.editor !== null) {
                 this.editor.setValue(note.value);
                 this.editor.refresh();
+            }
+        },
+        removeEditor() {
+            if (this.editor) {
+                var wrapper = this.editor.getWrapperElement();
+                wrapper.remove();
+                this.editor = null;
             }
         }
     }

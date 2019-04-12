@@ -52,6 +52,7 @@ const mutations = {
             return element.id !== payload;
         });
         state.notes = notes;
+        state.noteView.openId = null;
     },
     SETTINGS: (state, payload) => {
         state.settings = payload;

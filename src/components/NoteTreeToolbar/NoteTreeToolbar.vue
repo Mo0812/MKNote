@@ -8,12 +8,13 @@
             <b-button @click="add">Add</b-button>
         </b-button-group>
 
-        <b-button-group size="sm">
+        <b-button-group>
             <b-form-radio-group
                 id="btn-radios-1"
                 v-model="viewSelected"
                 :options="view.options"
                 buttons
+                size="sm"
                 name="radios-btn-default"
             ></b-form-radio-group>
         </b-button-group>

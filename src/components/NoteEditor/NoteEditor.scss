@@ -1,3 +1,11 @@
-.CodeMirror {
-    height: 100%;
+.note-editor {
+    .note-title {
+        &.note-title-input {
+            border-radius: 0 !important;
+        }
+    }
+
+    .CodeMirror {
+        height: calc(100% - #{$noteViewTitleHeight});
+    }
 }

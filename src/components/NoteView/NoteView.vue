@@ -1,11 +1,11 @@
 <template>
     <b-row class="h-100">
         <b-col cols="4" class="h-100 pr-0">
-            <NoteTree @open="open" @remove="remove" @changeNoteView="changeNoteView"/>
+            <NoteTree @openNote="openNote" @remove="removeNote" @changeNoteView="changeNoteView"/>
         </b-col>
         <template v-if="viewMode === 'both'">
             <b-col cols="4" class="px-0">
-                <NoteEditor :note="note" @update="update"/>
+                <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
             <b-col cols="4">
                 <NotePreview :note="note"/>
@@ -13,7 +13,7 @@
         </template>
         <template v-else-if="viewMode === 'md'">
             <b-col cols="8" class="px-0">
-                <NoteEditor :note="note" @update="update"/>
+                <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
         </template>
         <template v-else>
@@ -52,14 +52,14 @@ export default {
         }
     },
     methods: {
-        open(id) {
+        openNote(id) {
             const note = this.notes.find(element => element.id === id);
             this.note = note;
         },
-        update(updatedNote) {
+        updateNote(updatedNote) {
             this.$store.dispatch("updateNote", updatedNote);
         },
-        remove(id) {
+        removeNote(id) {
             this.$store.dispatch("removeNote", id);
         },
         changeNoteView(viewMode) {

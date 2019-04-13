@@ -4,6 +4,9 @@
 
 <script>
 import showdown from "showdown";
+
+import "./NotePreview.scss";
+
 export default {
     name: "NotePreview",
     props: ["note"],

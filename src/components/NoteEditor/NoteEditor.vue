@@ -1,6 +1,12 @@
 <template>
     <section class="note-editor h-100">
         <div v-if="note" class="note-editor-container h-100">
+            <b-form-input
+                class="note-title note-title-input"
+                placeholder="Title"
+                size="lg"
+                v-model="note.title"
+            ></b-form-input>
             <textarea id="md-textarea" ref="mdtextarea"/>
         </div>
         <h2 v-else>Wählen Sie zuerst eine Notiz aus oder erstellen Sie eine neue Notiz</h2>
@@ -41,8 +47,9 @@ export default {
                 var scope = this;
                 this.editor.on("change", editor => {
                     const currentValue = editor.getValue();
-                    scope.$emit("update", {
-                        id: this.note.id,
+                    scope.update({
+                        id: scope.note.id,
+                        title: scope.note.title,
                         value: currentValue
                     });
                 });
@@ -54,6 +61,9 @@ export default {
                 this.editor.setValue(this.note.value);
                 this.editor.refresh();
             }
+        },
+        update(note) {
+            this.$emit("updateNote", note);
         }
     }
 };

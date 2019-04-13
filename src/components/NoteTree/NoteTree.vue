@@ -7,15 +7,15 @@
                 class="note-tree-item flex-column align-items-start"
                 :key="note.id"
                 :active="openId === note.id"
-                @click="open(note.id)"
+                @click="openNote(note.id)"
             >
                 <header class="d-flex w-100 justify-content-between">
-                    <h5>Title</h5>
+                    <h5>{{note.title}}</h5>
                     <small>3 days ago</small>
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
                 <footer>
-                    <b-button variant="danger" size="sm" @click="remove(note.id)">Löschen</b-button>
+                    <b-button variant="danger" size="sm" @click="removeNote(note.id)">Löschen</b-button>
                 </footer>
             </b-list-group-item>
         </b-list-group>
@@ -45,12 +45,12 @@ export default {
         add() {
             this.$store.dispatch("addNote", {});
         },
-        open(id) {
+        openNote(id) {
             this.openId = id;
-            this.$emit("open", id);
+            this.$emit("openNote", id);
         },
-        remove(id) {
-            this.$emit("remove", id);
+        removeNote(id) {
+            this.$emit("removeNote", id);
         },
         changeNoteView(viewMode) {
             this.$emit("changeNoteView", viewMode);

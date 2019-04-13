@@ -56,6 +56,7 @@ const actions = {
         const newId = shortid.generate();
         const newNode = {
             id: newId,
+            title: "",
             value: ""
         };
         context.commit("NOTE_ADD", newNode);

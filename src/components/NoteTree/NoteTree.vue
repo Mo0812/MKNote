@@ -15,7 +15,9 @@
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
                 <footer>
-                    <b-button variant="danger" size="sm" @click="removeNote(note.id)">Löschen</b-button>
+                    <b-button variant="danger" size="sm" @click="removeNote(note.id)">
+                        <font-awesome-icon icon="trash"/>
+                    </b-button>
                 </footer>
             </b-list-group-item>
         </b-list-group>

@@ -5,19 +5,21 @@
         aria-label="Toolbar for managing notes"
     >
         <b-button-group size="sm">
-            <b-button @click="add">Add</b-button>
+            <b-button aria-label="Add new Note" @click="add">
+                <font-awesome-icon icon="plus"/>
+            </b-button>
         </b-button-group>
 
-        <b-button-group>
-            <b-form-radio-group
-                id="btn-radios-1"
-                v-model="view.selected"
-                :options="view.options"
-                buttons
-                size="sm"
-                name="radios-btn-default"
-                @change="change"
-            ></b-form-radio-group>
+        <b-button-group size="sm">
+            <b-button
+                v-for="option in view.options"
+                :key="option.value"
+                :aria-label="option.label"
+                :active="option.value === view.selected"
+                @click="changeNoteView(option.value)"
+            >
+                <font-awesome-icon :icon="option.icon"/>
+            </b-button>
         </b-button-group>
     </b-button-toolbar>
 </template>
@@ -32,9 +34,17 @@ export default {
             view: {
                 selected: "both",
                 options: [
-                    { text: "Md", value: "md" },
-                    { text: "Prev", value: "preview" },
-                    { text: "Both", value: "both" }
+                    {
+                        icon: "code",
+                        label: "Only Markdown Editor",
+                        value: "md"
+                    },
+                    { icon: "eye", label: "Only Preview", value: "preview" },
+                    {
+                        icon: "book-open",
+                        label: "Markdown Editor and Preview",
+                        value: "both"
+                    }
                 ]
             }
         };
@@ -43,7 +53,7 @@ export default {
         add() {
             this.$emit("add");
         },
-        change(value) {
+        changeNoteView(value) {
             this.$emit("changeNoteView", value);
         }
     }

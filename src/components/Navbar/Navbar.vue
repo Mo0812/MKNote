@@ -13,10 +13,22 @@
 
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
-                    <template slot="button-content">{{$t("navbar.user")}}</template>
-                    <b-dropdown-item href="#" disabled>{{$t("navbar.profile")}}</b-dropdown-item>
-                    <b-dropdown-item href="#" to="/settings">{{$t("navbar.settings")}}</b-dropdown-item>
-                    <b-dropdown-item href="#" disabled>{{$t("navbar.logout")}}</b-dropdown-item>
+                    <template slot="button-content">
+                        <font-awesome-icon icon="user-circle"/>
+                        {{$t("navbar.user")}}
+                    </template>
+                    <b-dropdown-item href="#" disabled>
+                        <font-awesome-icon icon="id-badge"/>
+                        {{$t("navbar.profile")}}
+                    </b-dropdown-item>
+                    <b-dropdown-item href="#" to="/settings">
+                        <font-awesome-icon icon="cogs"/>
+                        {{$t("navbar.settings")}}
+                    </b-dropdown-item>
+                    <b-dropdown-item href="#" disabled>
+                        <font-awesome-icon icon="sign-out-alt"/>
+                        {{$t("navbar.logout")}}
+                    </b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>

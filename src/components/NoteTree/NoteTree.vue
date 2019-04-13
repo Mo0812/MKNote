@@ -11,7 +11,7 @@
             >
                 <header class="d-flex w-100 justify-content-between">
                     <h5>{{note.title}}</h5>
-                    <small>3 days ago</small>
+                    <small>{{formatDate(note.created)}}</small>
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
                 <footer>
@@ -28,6 +28,7 @@ import "./NoteTree.scss";
 
 export default {
     name: "NoteTree",
+    props: ["notes"],
     components: {
         NoteTreeToolbar
     },
@@ -36,11 +37,7 @@ export default {
             openId: null
         };
     },
-    computed: {
-        notes() {
-            return this.$store.getters.getNotes;
-        }
-    },
+    computed: {},
     methods: {
         add() {
             this.$store.dispatch("addNote", {});
@@ -54,6 +51,11 @@ export default {
         },
         changeNoteView(viewMode) {
             this.$emit("changeNoteView", viewMode);
+        },
+        formatDate(date) {
+            return this.moment(date)
+                .startOf("minute")
+                .fromNow();
         }
     }
 };

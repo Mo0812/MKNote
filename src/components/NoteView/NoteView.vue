@@ -1,7 +1,12 @@
 <template>
     <b-row class="h-100">
         <b-col cols="4" class="h-100 pr-0">
-            <NoteTree @openNote="openNote" @remove="removeNote" @changeNoteView="changeNoteView"/>
+            <NoteTree
+                :notes="notes"
+                @openNote="openNote"
+                @removeNote="removeNote"
+                @changeNoteView="changeNoteView"
+            />
         </b-col>
         <template v-if="viewMode === 'both'">
             <b-col cols="4" class="px-0">

@@ -57,7 +57,8 @@ const actions = {
         const newNode = {
             id: newId,
             title: "",
-            value: ""
+            value: "",
+            created: Date.now()
         };
         context.commit("NOTE_ADD", newNode);
     },

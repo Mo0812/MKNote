@@ -8,10 +8,6 @@ import shortid from "shortid";
 Vue.use(Vuex);
 
 const state = {
-    noteView: {
-        viewMode: "both",
-        openId: null
-    },
     notes: [],
     settings: {
         lang: process.env.VUE_APP_I18N_LOCALE || "en",
@@ -21,15 +17,6 @@ const state = {
 // const defaultState = state;
 const getters = {
     getNoteView: state => state.noteView,
-    getNoteOpen: state => {
-        const note = state.notes.find(
-            element => element.id === state.noteView.openId
-        );
-        if (typeof note !== "undefined") {
-            return note;
-        }
-        return null;
-    },
     getNotes: state => state.notes,
     getSettings: state => state.settings
 };
@@ -43,15 +30,6 @@ const mutations = {
         var note = notes.find(element => element.id === payload.id);
         note.value = payload.value;
     },
-    NOTE_OPEN: (state, payload) => {
-        const notes = state.notes;
-        var note = notes.find(element => element.id === payload);
-        if (typeof note !== "undefined") {
-            state.noteView.openId = payload;
-        } else {
-            state.noteView.openId = null;
-        }
-    },
     NOTE_ADD: (state, payload) => {
         var notes = state.notes;
         notes.push(payload);
@@ -62,7 +40,6 @@ const mutations = {
             return element.id !== payload;
         });
         state.notes = notes;
-        state.noteView.openId = null;
     },
     SETTINGS: (state, payload) => {
         state.settings = payload;
@@ -74,9 +51,6 @@ const actions = {
     },
     updateNote: (context, payload) => {
         context.commit("NOTE_UPDATE", payload);
-    },
-    openNote: (context, payload) => {
-        context.commit("NOTE_OPEN", payload);
     },
     addNote: (context, payload) => {
         const newId = shortid.generate();

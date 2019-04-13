@@ -6,6 +6,7 @@
 import showdown from "showdown";
 export default {
     name: "NotePreview",
+    props: ["note"],
     data() {
         return {
             converter: null
@@ -13,11 +14,12 @@ export default {
     },
     computed: {
         noteValue() {
-            const note = this.$store.getters.getNoteOpen;
+            const note = this.note;
+            var output = null;
             if (note) {
-                return this.converter.makeHtml(note.value);
+                output = this.converter.makeHtml(note.value);
             }
-            return null;
+            return output;
         }
     },
     created() {

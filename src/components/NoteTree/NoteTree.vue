@@ -1,12 +1,12 @@
 <template>
     <aside class="note-tree">
-        <NoteTreeToolbar @add="add"/>
+        <NoteTreeToolbar @add="add" @changeNoteView="changeNoteView"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
                 v-for="note in notes"
                 class="note-tree-item flex-column align-items-start"
                 :key="note.id"
-                :active="noteIdOpen === note.id"
+                :active="openId === note.id"
                 @click="open(note.id)"
             >
                 <header class="d-flex w-100 justify-content-between">
@@ -31,11 +31,12 @@ export default {
     components: {
         NoteTreeToolbar
     },
+    data() {
+        return {
+            openId: null
+        };
+    },
     computed: {
-        noteIdOpen() {
-            const noteView = this.$store.getters.getNoteView;
-            return noteView.openId;
-        },
         notes() {
             return this.$store.getters.getNotes;
         }
@@ -45,10 +46,14 @@ export default {
             this.$store.dispatch("addNote", {});
         },
         open(id) {
-            this.$store.dispatch("openNote", id);
+            this.openId = id;
+            this.$emit("open", id);
         },
         remove(id) {
-            this.$store.dispatch("removeNote", id);
+            this.$emit("remove", id);
+        },
+        changeNoteView(viewMode) {
+            this.$emit("changeNoteView", viewMode);
         }
     }
 };

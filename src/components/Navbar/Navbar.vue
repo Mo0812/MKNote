@@ -14,19 +14,19 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
                     <template slot="button-content">
-                        <font-awesome-icon icon="user-circle"/>
+                        <font-awesome-icon icon="user-circle" class="mr-1"/>
                         {{$t("navbar.user")}}
                     </template>
                     <b-dropdown-item href="#" disabled>
-                        <font-awesome-icon icon="id-badge"/>
+                        <font-awesome-icon icon="id-badge" class="mr-1"/>
                         {{$t("navbar.profile")}}
                     </b-dropdown-item>
                     <b-dropdown-item href="#" to="/settings">
-                        <font-awesome-icon icon="cogs"/>
+                        <font-awesome-icon icon="cog" class="mr-1"/>
                         {{$t("navbar.settings")}}
                     </b-dropdown-item>
                     <b-dropdown-item href="#" disabled>
-                        <font-awesome-icon icon="sign-out-alt"/>
+                        <font-awesome-icon icon="sign-out-alt" class="mr-1"/>
                         {{$t("navbar.logout")}}
                     </b-dropdown-item>
                 </b-nav-item-dropdown>

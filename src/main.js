@@ -14,7 +14,7 @@ import {
     faBookOpen,
     faTrash,
     faUserCircle,
-    faCogs,
+    faCog,
     faIdBadge,
     faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +24,8 @@ import "@/assets/scss/base.scss";
 
 Vue.use(BootstrapVue);
 
+const settings = store.getters.getSettings;
+moment.locale(settings.lang);
 Vue.prototype.moment = moment;
 
 library.add(
@@ -33,7 +35,7 @@ library.add(
     faBookOpen,
     faTrash,
     faUserCircle,
-    faCogs,
+    faCog,
     faIdBadge,
     faSignOutAlt
 );

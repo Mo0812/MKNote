@@ -6,6 +6,7 @@
                 placeholder="Title"
                 size="lg"
                 v-model="note.title"
+                @update="update"
             ></b-form-input>
             <textarea id="md-textarea" ref="mdtextarea"/>
         </div>
@@ -47,11 +48,9 @@ export default {
                 var scope = this;
                 this.editor.on("change", editor => {
                     const currentValue = editor.getValue();
-                    scope.update({
-                        _id: scope.note._id,
-                        title: scope.note.title,
-                        value: currentValue
-                    });
+                    if (currentValue !== scope.note.value) {
+                        scope.update();
+                    }
                 });
             }
             this.refreshEditor();
@@ -62,7 +61,12 @@ export default {
                 this.editor.refresh();
             }
         },
-        update(note) {
+        update() {
+            const note = {
+                _id: this.note._id,
+                title: this.note.title,
+                value: this.editor.getValue()
+            };
             this.$emit("updateNote", note);
         }
     }

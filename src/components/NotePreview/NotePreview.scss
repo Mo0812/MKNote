@@ -1,3 +1,7 @@
 .note-preview {
     padding-top: $noteViewTitleHeight;
+
+    img {
+        max-width: 100%;
+    }
 }

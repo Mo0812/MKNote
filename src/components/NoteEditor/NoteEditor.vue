@@ -52,6 +52,9 @@ export default {
                         scope.update();
                     }
                 });
+                this.editor.on("drop", (editor, evt) => {
+                    this.addImage(evt);
+                });
             }
             this.refreshEditor();
         },
@@ -68,6 +71,18 @@ export default {
                 value: this.editor.getValue()
             };
             this.$emit("updateNote", note);
+        },
+        addImage(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            console.log(evt.dataTransfer.files);
+            var reader = new FileReader();
+            reader.readAsDataURL(evt.dataTransfer.files[0]);
+            reader.onload = function() {
+                var fileContent = reader.result;
+                console.log(fileContent);
+                // Following: https://pouchdb.com/guides/attachments.html
+            };
         }
     }
 };

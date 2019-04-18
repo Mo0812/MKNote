@@ -8,7 +8,7 @@ import PouchDB from "pouchdb";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
-const db = PouchDB("mknotes");
+const db = PouchDB("mknotes", { auto_compaction: true });
 
 Vue.use(Vuex);
 

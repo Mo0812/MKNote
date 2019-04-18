@@ -4,28 +4,9 @@ workbox.setConfig({
     debug: true
 });
 
-//self.__preachingManifest = [].concat(self.__preachingManifest || []);
-//workbox.precaching.supressWarnings();
-workbox.precaching.precacheAndRoute([
-    "/index.html",
-    "/js/*",
-    "/css/*",
-    "/*.js"
-]);
-
-workbox.routing.registerRoute(
-    /\.js$/,
-    workbox.strategies.networkFirst({
-        cacheName: "js"
-    })
-);
-
-workbox.routing.registerRoute(
-    /\.css$/,
-    workbox.strategies.staleWhileRevalidate({
-        cacheName: "css"
-    })
-);
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.suppressWarnings();
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerRoute(
     /\.(?:png|gif|jpg|jpeg|svg)$/,

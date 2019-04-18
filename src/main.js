@@ -21,6 +21,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import "@/assets/scss/base.scss";
+import './registerServiceWorker'
 
 Vue.use(BootstrapVue);
 

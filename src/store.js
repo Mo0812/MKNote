@@ -26,6 +26,9 @@ const getters = {
     getSettings: state => state.settings
 };
 const mutations = {
+    NOTE_INIT: (state, payload) => {
+        state.notes = payload;
+    },
     NOTE_UPDATE: (state, payload) => {
         const notes = state.notes;
         var note = notes.find(element => element._id === payload._id);
@@ -48,8 +51,22 @@ const mutations = {
     }
 };
 const actions = {
+    initNotes: (context, payload) => {
+        db.allDocs({
+            include_docs: true
+        })
+            .then(result => {
+                var docs = [];
+                result.rows.forEach(row => {
+                    docs.push(row.doc);
+                });
+                context.commit("NOTE_INIT", docs);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
     updateNote: (context, payload) => {
-        console.log(payload);
         db.get(payload._id)
             .then(doc => {
                 doc.title = payload.title;

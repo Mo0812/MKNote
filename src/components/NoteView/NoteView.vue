@@ -56,6 +56,9 @@ export default {
             return this.$store.getters.getNotes;
         }
     },
+    created() {
+        this.$store.dispatch("initNotes");
+    },
     methods: {
         openNote(id) {
             const note = this.notes.find(element => element._id === id);

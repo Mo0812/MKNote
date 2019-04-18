@@ -21,13 +21,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import "@/assets/scss/base.scss";
-import './registerServiceWorker'
+import "./registerServiceWorker";
 
 Vue.use(BootstrapVue);
 
 const settings = store.getters.getSettings;
 moment.locale(settings.lang);
-Vue.prototype.moment = moment;
+Vue.prototype.$moment = moment;
 
 library.add(
     faPlus,

@@ -48,7 +48,7 @@ export default {
                 this.editor.on("change", editor => {
                     const currentValue = editor.getValue();
                     scope.update({
-                        id: scope.note.id,
+                        _id: scope.note._id,
                         title: scope.note.title,
                         value: currentValue
                     });

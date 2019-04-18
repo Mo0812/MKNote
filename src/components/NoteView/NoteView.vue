@@ -58,7 +58,7 @@ export default {
     },
     methods: {
         openNote(id) {
-            const note = this.notes.find(element => element.id === id);
+            const note = this.notes.find(element => element._id === id);
             this.note = note;
         },
         updateNote(updatedNote) {

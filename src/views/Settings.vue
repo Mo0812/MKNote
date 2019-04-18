@@ -61,7 +61,7 @@ export default {
         settings: {
             handler(newSettings, oldSettings) {
                 if (newSettings.lang === oldSettings.lang) {
-                    this.moment.locale(newSettings.lang);
+                    this.$moment.locale(newSettings.lang);
                     this.$i18n.locale = newSettings.lang;
                 }
             },

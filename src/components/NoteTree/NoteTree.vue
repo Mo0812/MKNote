@@ -5,9 +5,9 @@
             <b-list-group-item
                 v-for="note in notes"
                 class="note-tree-item flex-column align-items-start"
-                :key="note.id"
-                :active="openId === note.id"
-                @click="openNote(note.id)"
+                :key="note._id"
+                :active="openId === note._id"
+                @click="openNote(note._id)"
             >
                 <header class="d-flex w-100 justify-content-between">
                     <h5>{{note.title}}</h5>
@@ -15,7 +15,7 @@
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
                 <footer>
-                    <b-button variant="danger" size="sm" @click="removeNote(note.id)">
+                    <b-button variant="danger" size="sm" @click="removeNote(note._id)">
                         <font-awesome-icon icon="trash"/>
                     </b-button>
                 </footer>
@@ -55,7 +55,7 @@ export default {
             this.$emit("changeNoteView", viewMode);
         },
         formatDate(date) {
-            return this.moment(date)
+            return this.$moment(date)
                 .startOf("minute")
                 .fromNow();
         }

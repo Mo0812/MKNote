@@ -92,6 +92,7 @@ const actions = {
         db.put(newNode)
             .then(response => {
                 console.log(response);
+                newNode._rev = response._rev;
                 context.commit("NOTE_ADD", newNode);
             })
             .catch(error => {

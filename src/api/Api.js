@@ -27,6 +27,10 @@ export default {
         const response = await db.putAttachment(id, name, doc._rev, blob, mime);
         return response;
     },
+    async getAttachment(id, name) {
+        const blob = await db.getAttachment(id, name);
+        return blob;
+    },
     async updateNote(payload) {
         const doc = await db.get(payload._id);
         doc.title = payload.title;

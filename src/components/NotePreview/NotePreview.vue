@@ -4,7 +4,7 @@
 
 <script>
 import showdown from "showdown";
-import PouchDB from "pouchdb";
+import Api from "@/api/Api";
 import * as blobUtil from "blob-util";
 
 import "./NotePreview.scss";
@@ -30,18 +30,18 @@ export default {
         this.converter = new showdown.Converter();
     },
     mounted() {
-        this.processMarkdown();
+        this.preProcessMarkdown();
     },
     watch: {
         note: {
             handler(newVal, oldVal) {
-                this.processMarkdown();
+                this.preProcessMarkdown();
             },
             deep: true
         }
     },
     methods: {
-        async processMarkdown() {
+        async preProcessMarkdown() {
             const note = this.note;
             if (note) {
                 const content = await this.processDatabaseEntries(note.value);
@@ -55,40 +55,28 @@ export default {
             while (match !== null) {
                 var identifier = match[2];
                 identifier = identifier.replace("note:", "");
-                const attachment = this.note._attachments[identifier];
-                const blob = blobUtil.base64StringToBlob(attachment.data);
-                content = content.replace(
-                    "note:" + identifier,
-                    blobUtil.createObjectURL(blob)
-                );
-                /*if (this.cache[identifier]) {
-                    content = content.replace(
-                        "note:" + identifier,
-                        this.cache[identifier]
-                    );
+                var data = null;
+
+                if (this.cache[identifier]) {
+                    data = this.cache[identifier];
                 } else {
-                    const db = PouchDB("mknotes");
-                    const blob = await db.getAttachment(
-                        this.note._id,
-                        identifier
-                    );
-                    const data = await this.readBlob(blob);
+                    const attachment = this.note._attachments[identifier];
+                    var blob = null;
+                    if (attachment) {
+                        blob = blobUtil.base64StringToBlob(attachment.data);
+                    } else {
+                        blob = await Api.getAttachment(
+                            this.note._id,
+                            identifier
+                        );
+                    }
+                    data = blobUtil.createObjectURL(blob);
                     this.cache[identifier] = data;
-                    content = content.replace("note:" + identifier, data);
-                }*/
+                }
+                content = content.replace("note:" + identifier, data);
                 match = regEx.exec(content);
             }
             return content;
-        },
-        readBlob(blob) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    resolve(reader.result);
-                };
-                reader.onerror = reject;
-                reader.readAsText(blob, "base64");
-            });
         }
     }
 };

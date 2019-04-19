@@ -10,7 +10,7 @@ export default {
     async getNotes() {
         const records = await db.allDocs({
             include_docs: true,
-            attachments: false
+            attachments: true
         });
         const docs = [];
         records.rows.forEach(row => {

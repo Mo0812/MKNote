@@ -75,7 +75,7 @@ export default {
                                 .then(image => {
                                     image.resize(1200, Jimp.AUTO);
                                     image.quality(60);
-                                    return image.getBase64Async(
+                                    return image.getBufferAsync(
                                         uploadedFile.mime
                                     );
                                 })

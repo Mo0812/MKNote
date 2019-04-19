@@ -5,6 +5,7 @@
 <script>
 import showdown from "showdown";
 import PouchDB from "pouchdb";
+import * as blobUtil from "blob-util";
 
 import "./NotePreview.scss";
 
@@ -54,7 +55,13 @@ export default {
             while (match !== null) {
                 var identifier = match[2];
                 identifier = identifier.replace("note:", "");
-                if (this.cache[identifier]) {
+                const attachment = this.note._attachments[identifier];
+                const blob = blobUtil.base64StringToBlob(attachment.data);
+                content = content.replace(
+                    "note:" + identifier,
+                    blobUtil.createObjectURL(blob)
+                );
+                /*if (this.cache[identifier]) {
                     content = content.replace(
                         "note:" + identifier,
                         this.cache[identifier]
@@ -68,7 +75,7 @@ export default {
                     const data = await this.readBlob(blob);
                     this.cache[identifier] = data;
                     content = content.replace("note:" + identifier, data);
-                }
+                }*/
                 match = regEx.exec(content);
             }
             return content;
@@ -80,7 +87,7 @@ export default {
                     resolve(reader.result);
                 };
                 reader.onerror = reject;
-                reader.readAsText(blob);
+                reader.readAsText(blob, "base64");
             });
         }
     }

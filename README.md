@@ -1,5 +1,15 @@
 # mk-notes
 
+## Roadmap
+
+* [ ] Syncing with couchDB server
+* [ ] Better UI experience when deleting objects
+* [ ] Export / Import of notes
+* [ ] Mass deletion of notes
+* [ ] Background script for deleting unused attachments
+* [ ] Snippets
+* [ ] Tags, Search, Hotkeys for better UX
+
 ## Project setup
 ```
 yarn install

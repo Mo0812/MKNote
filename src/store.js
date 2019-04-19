@@ -8,7 +8,7 @@ import PouchDB from "pouchdb";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
-const db = PouchDB("mknotes", { auto_compaction: true });
+const db = PouchDB("mknotes");
 
 Vue.use(Vuex);
 
@@ -53,7 +53,8 @@ const mutations = {
 const actions = {
     initNotes: (context, payload) => {
         db.allDocs({
-            include_docs: true
+            include_docs: true,
+            attachments: false
         })
             .then(result => {
                 var docs = [];
@@ -76,6 +77,28 @@ const actions = {
             .then(response => {
                 console.log(response);
                 context.commit("NOTE_UPDATE", payload);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    addAttachment: (context, payload) => {
+        return db
+            .get(payload._id)
+            .then(doc => {
+                var blob = new Blob([payload.attachment.data], {
+                    type: payload.attachment.mime
+                });
+                return db.putAttachment(
+                    doc._id,
+                    payload.attachment.name,
+                    doc._rev,
+                    blob,
+                    payload.attachment.mime
+                );
+            })
+            .then(response => {
+                console.log(response);
             })
             .catch(error => {
                 console.log(error);

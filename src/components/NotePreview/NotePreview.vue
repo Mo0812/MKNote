@@ -1,9 +1,10 @@
 <template>
-    <section class="note-preview h-100" v-html="noteValue"></section>
+    <section class="note-preview h-100" v-html="value"></section>
 </template>
 
 <script>
 import showdown from "showdown";
+import PouchDB from "pouchdb";
 
 import "./NotePreview.scss";
 
@@ -12,18 +13,10 @@ export default {
     props: ["note"],
     data() {
         return {
-            converter: null
+            converter: null,
+            value: null,
+            cache: {}
         };
-    },
-    computed: {
-        noteValue() {
-            const note = this.note;
-            var output = null;
-            if (note) {
-                output = this.converter.makeHtml(note.value);
-            }
-            return output;
-        }
     },
     created() {
         showdown.setFlavor("github");
@@ -34,6 +27,62 @@ export default {
         showdown.setOption("tables", true);
         showdown.setOption("strikethrough", true);
         this.converter = new showdown.Converter();
+    },
+    mounted() {
+        this.processMarkdown();
+    },
+    watch: {
+        note: {
+            handler(newVal, oldVal) {
+                this.processMarkdown();
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async processMarkdown() {
+            const note = this.note;
+            if (note) {
+                const content = await this.processDatabaseEntries(note.value);
+                const output = this.converter.makeHtml(content);
+                this.value = output;
+            }
+        },
+        async processDatabaseEntries(content) {
+            const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
+            var match = regEx.exec(content);
+            while (match !== null) {
+                var identifier = match[2];
+                identifier = identifier.replace("note:", "");
+                if (this.cache[identifier]) {
+                    content = content.replace(
+                        "note:" + identifier,
+                        this.cache[identifier]
+                    );
+                } else {
+                    const db = PouchDB("mknotes");
+                    const blob = await db.getAttachment(
+                        this.note._id,
+                        identifier
+                    );
+                    const data = await this.readBlob(blob);
+                    this.cache[identifier] = data;
+                    content = content.replace("note:" + identifier, data);
+                }
+                match = regEx.exec(content);
+            }
+            return content;
+        },
+        readBlob(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    resolve(reader.result);
+                };
+                reader.onerror = reject;
+                reader.readAsText(blob);
+            });
+        }
     }
 };
 </script>

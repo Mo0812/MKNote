@@ -22,7 +22,7 @@
             </b-col>
         </template>
         <template v-else>
-            <b-col cols="4">
+            <b-col cols="8">
                 <NotePreview :note="note"/>
             </b-col>
         </template>

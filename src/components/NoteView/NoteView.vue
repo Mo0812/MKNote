@@ -49,10 +49,6 @@ export default {
         };
     },
     computed: {
-        view() {
-            const noteView = this.$store.getters.getNoteView;
-            return noteView.viewMode;
-        },
         notes() {
             return this.$store.getters.getNotes;
         }

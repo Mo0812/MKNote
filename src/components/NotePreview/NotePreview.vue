@@ -57,12 +57,15 @@ export default {
                 identifier = identifier.replace("note:", "");
                 var data = null;
 
-                if (this.cache[identifier]) {
+                if (identifier in this.cache) {
                     data = this.cache[identifier];
                 } else {
-                    const attachment = this.note._attachments[identifier];
                     var blob = null;
-                    if (attachment) {
+                    if (
+                        "_attachments" in this.note &&
+                        identifier in this.note._attachments
+                    ) {
+                        const attachment = this.note._attachments[identifier];
                         blob = blobUtil.base64StringToBlob(attachment.data);
                     } else {
                         blob = await Api.getAttachment(

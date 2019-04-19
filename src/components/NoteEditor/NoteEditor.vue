@@ -1,6 +1,20 @@
 <template>
     <section class="note-editor h-100">
         <div v-if="note" class="note-editor-container h-100">
+            <b-alert variant="primary" :show="busy.uploading">
+                <h5 class="alert-heading">Uploading Image</h5>
+                <hr>
+                <b-spinner small label="Loading..." class="mx-auto mb-3 d-block"></b-spinner>
+                <p>Your image get currently uploaded and will be displayed if finished</p>
+                <b-progress
+                    :value="100"
+                    :max="100"
+                    variant="secondary"
+                    striped
+                    :animated="true"
+                    class="mb-3"
+                ></b-progress>
+            </b-alert>
             <b-form-input
                 class="note-title note-title-input"
                 placeholder="Title"
@@ -31,7 +45,10 @@ export default {
     props: ["note"],
     data() {
         return {
-            editor: null
+            editor: null,
+            busy: {
+                uploading: false
+            }
         };
     },
     mounted() {
@@ -39,6 +56,16 @@ export default {
     },
     updated() {
         this.initEditor();
+    },
+    watch: {
+        note: {
+            handler(newVal, oldVal) {
+                if (oldVal === null || newVal._id !== oldVal._id) {
+                    this.refreshEditor();
+                }
+            },
+            deep: true
+        }
     },
     methods: {
         initEditor() {
@@ -49,6 +76,7 @@ export default {
                     theme: "darcula",
                     lineWrapping: true
                 });
+                this.refreshEditor();
                 var scope = this;
                 this.editor.on("change", editor => {
                     const currentValue = editor.getValue();
@@ -57,6 +85,7 @@ export default {
                     }
                 });
                 this.editor.on("drop", async (editor, evt) => {
+                    this.busy.uploading = true;
                     evt.preventDefault();
                     evt.stopPropagation();
                     const files = evt.dataTransfer.files;
@@ -80,10 +109,11 @@ export default {
                         );
                         const content = "![" + name + "](note:" + name + ")";
                         this.insertOnCursor(content, editor);
+                        this.busy.uploading = false;
                     }
                 });
             }
-            this.refreshEditor();
+            //this.refreshEditor();
         },
         refreshEditor() {
             if (this.editor && this.note) {

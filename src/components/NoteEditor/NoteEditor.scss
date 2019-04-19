@@ -1,4 +1,9 @@
 .note-editor {
+    .alert {
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+    }
     .note-title {
         &.note-title-input {
             border-radius: 0 !important;

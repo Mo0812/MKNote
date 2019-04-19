@@ -7,7 +7,7 @@
                 <b-spinner small label="Loading..." class="mx-auto mb-3 d-block"></b-spinner>
                 <p>Your image get currently uploaded and will be displayed if finished</p>
                 <b-progress
-                    :value="100"
+                    :value="busy.progress"
                     :max="100"
                     variant="secondary"
                     striped
@@ -47,7 +47,8 @@ export default {
         return {
             editor: null,
             busy: {
-                uploading: false
+                uploading: false,
+                progress: 0
             }
         };
     },
@@ -60,8 +61,12 @@ export default {
     watch: {
         note: {
             handler(newVal, oldVal) {
-                if (oldVal === null || newVal._id !== oldVal._id) {
-                    this.refreshEditor();
+                if (newVal) {
+                    if (oldVal === null || newVal._id !== oldVal._id) {
+                        this.refreshEditor();
+                    }
+                } else {
+                    this.editor = null;
                 }
             },
             deep: true
@@ -86,6 +91,7 @@ export default {
                 });
                 this.editor.on("drop", async (editor, evt) => {
                     this.busy.uploading = true;
+                    this.busy.progress = 0;
                     evt.preventDefault();
                     evt.stopPropagation();
                     const files = evt.dataTransfer.files;
@@ -97,18 +103,22 @@ export default {
                             size = file.size;
 
                         const blob = await FileUtil.processFileUpload(file);
+                        this.busy.progress = 20;
                         const processedBlob = await ImageUtil.processUploadImage(
                             blob,
                             mime
                         );
+                        this.busy.progress = 50;
                         const result = await Api.putAttachment(
                             id,
                             name,
                             mime,
                             processedBlob
                         );
+                        this.busy.progress = 80;
                         const content = "![" + name + "](note:" + name + ")";
                         this.insertOnCursor(content, editor);
+                        this.busy.progress = 100;
                         this.busy.uploading = false;
                     }
                 });

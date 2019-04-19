@@ -47,6 +47,8 @@ export default {
                 const content = await this.processDatabaseEntries(note.value);
                 const output = this.converter.makeHtml(content);
                 this.value = output;
+            } else {
+                this.value = null;
             }
         },
         async processDatabaseEntries(content) {

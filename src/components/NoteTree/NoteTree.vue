@@ -15,7 +15,7 @@
                 </header>
                 <p class="excerpt mb-1">{{note.value}}</p>
                 <footer>
-                    <b-button variant="danger" size="sm" @click="removeNote(note._id)">
+                    <b-button variant="danger" size="sm" @click="removeNote(note._id, $event)">
                         <font-awesome-icon icon="trash"/>
                     </b-button>
                 </footer>
@@ -48,7 +48,12 @@ export default {
             this.openId = id;
             this.$emit("openNote", id);
         },
-        removeNote(id) {
+        removeNote(id, evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (this.openId === id) {
+                this.openId = null;
+            }
             this.$emit("removeNote", id);
         },
         changeNoteView(viewMode) {

@@ -25,7 +25,7 @@
 
         <b-button-group size="sm">
             <b-button
-                v-for="option in view.options"
+                v-for="option in share.options"
                 :key="option.value"
                 :aria-label="option.label"
                 :active="option.value === view.selected"
@@ -57,6 +57,20 @@ export default {
                         icon: "book-open",
                         label: "Markdown Editor and Preview",
                         value: "both"
+                    }
+                ]
+            },
+            share: {
+                options: [
+                    {
+                        icon: "file-import",
+                        label: "Import notes",
+                        value: "import"
+                    },
+                    {
+                        icon: "file-export",
+                        label: "Export notes",
+                        value: "export"
                     }
                 ]
             }

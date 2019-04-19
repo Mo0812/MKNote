@@ -67,8 +67,9 @@ export default {
         updateNote(updatedNote) {
             this.$store.dispatch("updateNote", updatedNote);
         },
-        removeNote(id) {
-            this.$store.dispatch("removeNote", id);
+        async removeNote(id) {
+            await this.$store.dispatch("removeNote", id);
+            this.note = null;
         },
         changeNoteView(viewMode) {
             this.viewMode = viewMode;

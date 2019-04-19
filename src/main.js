@@ -16,7 +16,9 @@ import {
     faUserCircle,
     faCog,
     faIdBadge,
-    faSignOutAlt
+    faSignOutAlt,
+    faFileExport,
+    faFileImport
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -38,7 +40,9 @@ library.add(
     faUserCircle,
     faCog,
     faIdBadge,
-    faSignOutAlt
+    faSignOutAlt,
+    faFileExport,
+    faFileImport
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

@@ -64,7 +64,7 @@ export default {
     },
     methods: {
         add() {
-            this.$emit("add");
+            this.$emit("addNote");
         },
         changeNoteView(value) {
             this.$emit("changeNoteView", value);

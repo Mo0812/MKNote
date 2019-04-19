@@ -20,6 +20,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown";
 import "codemirror/theme/darcula.css";
 
+import Api from "@/api/Api";
 import Jimp from "jimp";
 
 import "./NoteEditor.scss";
@@ -79,14 +80,13 @@ export default {
                                     );
                                 })
                                 .then(result => {
-                                    console.log(result);
                                     uploadedFile.data = result;
-                                    var payload = {
-                                        _id: scope.note._id,
-                                        attachment: uploadedFile
-                                    };
-                                    var result = scope.$store
-                                        .dispatch("addAttachment", payload)
+                                    Api.putAttachment(
+                                        scope.note._id,
+                                        uploadedFile.name,
+                                        uploadedFile.mime,
+                                        uploadedFile.data
+                                    )
                                         .then(result => {
                                             const data =
                                                 "![" +

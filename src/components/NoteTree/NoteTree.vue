@@ -1,6 +1,6 @@
 <template>
     <aside class="note-tree">
-        <NoteTreeToolbar @add="add" @changeNoteView="changeNoteView"/>
+        <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
                 v-for="note in notes"
@@ -41,8 +41,8 @@ export default {
     },
     computed: {},
     methods: {
-        add() {
-            this.$store.dispatch("addNote", {});
+        addNote() {
+            this.$emit("addNote");
         },
         openNote(id) {
             this.openId = id;

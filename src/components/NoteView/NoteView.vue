@@ -3,6 +3,7 @@
         <b-col cols="4" class="h-100 pr-0">
             <NoteTree
                 :notes="notes"
+                @addNote="addNote"
                 @openNote="openNote"
                 @removeNote="removeNote"
                 @changeNoteView="changeNoteView"
@@ -60,6 +61,9 @@ export default {
         this.$store.dispatch("initNotes");
     },
     methods: {
+        addNote() {
+            this.$store.dispatch("addNote", {});
+        },
         openNote(id) {
             const note = this.notes.find(element => element._id === id);
             this.note = note;

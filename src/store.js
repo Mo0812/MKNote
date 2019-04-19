@@ -1,14 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
-import shortid from "shortid";
-import PouchDB from "pouchdb";
-
-//import i18n from "./i18n";
-shortid.characters(
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
-);
-const db = PouchDB("mknotes");
+import Api from "@/api/Api";
 
 Vue.use(Vuex);
 
@@ -21,7 +14,6 @@ const state = {
 };
 // const defaultState = state;
 const getters = {
-    getNoteView: state => state.noteView,
     getNotes: state => state.notes,
     getSettings: state => state.settings
 };
@@ -52,88 +44,24 @@ const mutations = {
 };
 const actions = {
     initNotes: (context, payload) => {
-        db.allDocs({
-            include_docs: true,
-            attachments: false
-        })
-            .then(result => {
-                var docs = [];
-                result.rows.forEach(row => {
-                    docs.push(row.doc);
-                });
-                context.commit("NOTE_INIT", docs);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        Api.getNotes().then(docs => {
+            context.commit("NOTE_INIT", docs);
+        });
     },
     updateNote: (context, payload) => {
-        db.get(payload._id)
-            .then(doc => {
-                doc.title = payload.title;
-                doc.value = payload.value;
-                return db.put(doc);
-            })
-            .then(response => {
-                console.log(response);
-                context.commit("NOTE_UPDATE", payload);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    },
-    addAttachment: (context, payload) => {
-        return db
-            .get(payload._id)
-            .then(doc => {
-                var blob = new Blob([payload.attachment.data], {
-                    type: payload.attachment.mime
-                });
-                return db.putAttachment(
-                    doc._id,
-                    payload.attachment.name,
-                    doc._rev,
-                    blob,
-                    payload.attachment.mime
-                );
-            })
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        Api.updateNote(payload).then(response => {
+            context.commit("NOTE_UPDATE", payload);
+        });
     },
     addNote: (context, payload) => {
-        const newId = shortid.generate();
-        const newNode = {
-            _id: newId,
-            title: "",
-            value: "",
-            created: Date.now()
-        };
-        db.put(newNode)
-            .then(response => {
-                console.log(response);
-                newNode._rev = response._rev;
-                context.commit("NOTE_ADD", newNode);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        Api.addNote(payload).then(newNode => {
+            context.commit("NOTE_ADD", newNode);
+        });
     },
     removeNote: (context, payload) => {
-        db.get(payload)
-            .then(doc => {
-                return db.remove(doc);
-            })
-            .then(response => {
-                console.log(response);
-                context.commit("NOTE_REMOVE", payload);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        Api.removeNote(payload).then(response => {
+            context.commit("NOTE_REMOVE", payload);
+        });
     },
     settings: (context, payload) => {
         context.commit("SETTINGS", payload);

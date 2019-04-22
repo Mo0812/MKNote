@@ -52,5 +52,11 @@ export default {
     async removeNote(id) {
         const doc = await db.get(id);
         await db.remove(doc);
+    },
+    async export() {
+        const docs = await this.getNotes();
+        const rawDocs = JSON.stringify(docs);
+        var blob = new Blob([rawDocs], { type: "application/json" });
+        return blob;
     }
 };

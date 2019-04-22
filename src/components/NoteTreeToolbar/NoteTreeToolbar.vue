@@ -1,6 +1,6 @@
 <template>
     <b-button-toolbar
-        class="note-tree-toolbar mt-3 pb-3 mr-3"
+        class="note-tree-toolbar pt-2 pb-2 mr-3"
         key-nav
         aria-label="Toolbar for managing notes"
         :justify="true"
@@ -29,7 +29,7 @@
                 :key="option.value"
                 :aria-label="option.label"
                 :active="option.value === view.selected"
-                @click="changeNoteView(option.value)"
+                @click="shareAction(option.value)"
             >
                 <font-awesome-icon :icon="option.icon"/>
             </b-button>
@@ -82,6 +82,9 @@ export default {
         },
         changeNoteView(value) {
             this.$emit("changeNoteView", value);
+        },
+        shareAction(action) {
+            this.$emit("share", action);
         }
     }
 };

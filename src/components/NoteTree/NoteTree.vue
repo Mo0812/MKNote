@@ -1,6 +1,17 @@
 <template>
     <aside class="note-tree">
-        <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView"/>
+        <b-alert variant="primary" :show="action.show">
+            <h5 class="alert-heading">{{action.title}}</h5>
+            <hr>
+            <p>{{action.content}}</p>
+            <b-spinner v-if="action.busy" small label="Loading..." class="mx-auto mb-3 d-block"></b-spinner>
+            <b-button
+                v-if="action.result"
+                class="mx-auto d-block"
+                @click="download(action.result)"
+            >Download file</b-button>
+        </b-alert>
+        <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView" @share="share"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
                 v-for="note in notes"
@@ -25,6 +36,8 @@
 </template>
 
 <script>
+import Api from "@/api/Api";
+import FileUtil from "@/utils/FileUtil";
 import NoteTreeToolbar from "@/components/NoteTreeToolbar/NoteTreeToolbar";
 import "./NoteTree.scss";
 
@@ -36,7 +49,14 @@ export default {
     },
     data() {
         return {
-            openId: null
+            openId: null,
+            action: {
+                title: "",
+                content: "",
+                show: false,
+                busy: false,
+                result: null
+            }
         };
     },
     computed: {},
@@ -58,6 +78,26 @@ export default {
         },
         changeNoteView(viewMode) {
             this.$emit("changeNoteView", viewMode);
+        },
+        async share(action) {
+            switch (action) {
+                case "export":
+                    this.action = {
+                        show: true,
+                        title: "Exporting...",
+                        content: "Your files getting prepared",
+                        busy: true,
+                        result: null
+                    };
+                    const blob = await Api.export();
+                    this.action.content = "Your files are ready to download";
+                    this.action.busy = false;
+                    this.action.result = blob;
+            }
+        },
+        download(blob) {
+            FileUtil.downloadBlob(blob);
+            this.action.show = false;
         },
         formatDate(date) {
             return this.$moment(date)

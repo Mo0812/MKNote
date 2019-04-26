@@ -1,6 +1,16 @@
 <template>
     <aside class="note-tree">
-        <b-alert variant="primary" :show="action.show">
+        <ActionAlert
+            :show="action.show"
+            :title="action.title"
+            :content="action.content"
+            :busy="action.busy"
+            :result="action.result"
+            :actionShow="action.actionShow"
+            :actionContent="action.actionContent"
+            @action="alertAction"
+        />
+        <!--<b-alert variant="primary" :show="action.show">
             <h5 class="alert-heading">{{action.title}}</h5>
             <hr>
             <p>{{action.content}}</p>
@@ -10,7 +20,7 @@
                 class="mx-auto d-block"
                 @click="download(action.result)"
             >Download file</b-button>
-        </b-alert>
+        </b-alert>-->
         <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView" @share="share"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
@@ -38,6 +48,7 @@
 <script>
 import Api from "@/api/Api";
 import FileUtil from "@/utils/FileUtil";
+import ActionAlert from "@/components/ActionAlert/ActionAlert";
 import NoteTreeToolbar from "@/components/NoteTreeToolbar/NoteTreeToolbar";
 import "./NoteTree.scss";
 
@@ -45,6 +56,7 @@ export default {
     name: "NoteTree",
     props: ["notes"],
     components: {
+        ActionAlert,
         NoteTreeToolbar
     },
     data() {
@@ -55,11 +67,25 @@ export default {
                 content: "",
                 show: false,
                 busy: false,
-                result: null
+                result: null,
+                actionContent: "",
+                actionShow: false
             }
         };
     },
-    computed: {},
+    computed: {
+        defaultAction() {
+            return {
+                title: "",
+                content: "",
+                show: false,
+                busy: false,
+                result: null,
+                actionContent: "",
+                actionShow: false
+            };
+        }
+    },
     methods: {
         addNote() {
             this.$emit("addNote");
@@ -83,21 +109,43 @@ export default {
             switch (action) {
                 case "export":
                     this.action = {
+                        type: action,
                         show: true,
                         title: "Exporting...",
                         content: "Your files getting prepared",
-                        busy: true,
-                        result: null
+                        busy: true
                     };
                     const blob = await Api.export();
                     this.action.content = "Your files are ready to download";
                     this.action.busy = false;
+                    this.action.actionShow = true;
+                    this.action.actionContent = "Download file";
                     this.action.result = blob;
+                    break;
+                case "import":
+                    this.action = {
+                        type: action,
+                        show: true,
+                        title: "Import...",
+                        content: "Please choose a file to import",
+                        busy: false,
+                        result: null,
+                        actionShow: true,
+                        actionContent: "Choose import file"
+                    };
             }
         },
-        download(blob) {
-            FileUtil.downloadBlob(blob);
-            this.action.show = false;
+        alertAction() {
+            switch (this.action.type) {
+                case "export":
+                    FileUtil.downloadBlob(this.action.result);
+                    this.action.show = false;
+                    this.action = this.defaultAction;
+                    break;
+                case "import":
+                    FileUtil.uploadDialog();
+                    break;
+            }
         },
         formatDate(date) {
             return this.$moment(date)

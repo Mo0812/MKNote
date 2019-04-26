@@ -10,6 +10,22 @@ export default {
             reader.readAsDataURL(file);
         });
     },
+    uploadDialog() {
+        var div = document.createElement("div"),
+            input = document.createElement("input");
+
+        input.setAttribute("type", "file");
+
+        document.body.appendChild(div);
+        div.appendChild(input);
+
+        div.style.width = "0";
+        div.style.height = "0";
+
+        var ev = new MouseEvent("click", {});
+        input.dispatchEvent(ev);
+        //document.body.removeChild(div);
+    },
     downloadBlob(blob) {
         var url = URL.createObjectURL(blob),
             div = document.createElement("div"),

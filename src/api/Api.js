@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
+import CryptoUtil from "@/utils/CryptoUtil";
 
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
@@ -14,6 +15,8 @@ export default {
         });
         const docs = [];
         records.rows.forEach(row => {
+            row.doc.title = CryptoUtil.decryptString(row.doc.title);
+            row.doc.value = CryptoUtil.decryptString(row.doc.value);
             docs.push(row.doc);
         });
         return docs;
@@ -32,21 +35,28 @@ export default {
         return blob;
     },
     async updateNote(payload) {
+        const title = CryptoUtil.encryptString(payload.title);
+        const value = CryptoUtil.encryptString(payload.value);
         const doc = await db.get(payload._id);
-        doc.title = payload.title;
-        doc.value = payload.value;
+        doc.title = title;
+        doc.value = value;
         await db.put(doc);
     },
     async addNote() {
         const newId = shortid.generate();
+        const title = CryptoUtil.encryptString("");
+        const value = CryptoUtil.encryptString("");
         const newNode = {
             _id: newId,
-            title: "",
-            value: "",
+            title: title,
+            value: value,
             created: Date.now()
         };
+
         const responseNode = await db.put(newNode);
         newNode._rev = responseNode._rev;
+        newNode.title = "";
+        newNode.value = "";
         return newNode;
     },
     async removeNote(id) {

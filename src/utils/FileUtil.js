@@ -1,5 +1,5 @@
 export default {
-    processFileUpload(file) {
+    uploadFile(file) {
         return new Promise((resolve, reject) => {
             var reader = new FileReader();
             reader.onload = function() {

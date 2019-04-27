@@ -8,15 +8,17 @@ shortid.characters(
 const db = PouchDB("mknotes");
 
 export default {
-    async getNotes() {
+    async getNotes(decrypt = true) {
         const records = await db.allDocs({
             include_docs: true,
             attachments: true
         });
         const docs = [];
         records.rows.forEach(row => {
-            row.doc.title = CryptoUtil.decryptString(row.doc.title);
-            row.doc.value = CryptoUtil.decryptString(row.doc.value);
+            if (decrypt) {
+                row.doc.title = CryptoUtil.decryptString(row.doc.title);
+                row.doc.value = CryptoUtil.decryptString(row.doc.value);
+            }
             docs.push(row.doc);
         });
         return docs;
@@ -64,7 +66,7 @@ export default {
         await db.remove(doc);
     },
     async export() {
-        const docs = await this.getNotes();
+        const docs = await this.getNotes(false);
         const rawDocs = JSON.stringify(docs);
         var blob = new Blob([rawDocs], { type: "application/json" });
         return blob;

@@ -18,6 +18,11 @@
                         {{$t("navbar.user")}}
                     </template>
                     <b-dropdown-item href="#" disabled>
+                        <font-awesome-icon icon="code-branch" class="mr-1"/>
+                        {{version}}
+                    </b-dropdown-item>
+                    <b-dropdown-divider/>
+                    <b-dropdown-item href="#" disabled>
                         <font-awesome-icon icon="id-badge" class="mr-1"/>
                         {{$t("navbar.profile")}}
                     </b-dropdown-item>
@@ -37,6 +42,11 @@
 
 <script>
 export default {
-    name: "Navbar"
+    name: "Navbar",
+    computed: {
+        version() {
+            return "Version: " + process.env.VUE_APP_VERSION;
+        }
+    }
 };
 </script>

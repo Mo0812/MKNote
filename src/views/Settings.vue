@@ -1,5 +1,5 @@
 <template>
-    <section class="settings">
+    <section class="settings mt-3">
         <h2>{{$t("settings.title")}}</h2>
         <SettingSection
             id="settings-lang"

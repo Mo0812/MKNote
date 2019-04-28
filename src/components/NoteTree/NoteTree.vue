@@ -10,17 +10,6 @@
             :actionContent="action.actionContent"
             @action="alertAction"
         />
-        <!--<b-alert variant="primary" :show="action.show">
-            <h5 class="alert-heading">{{action.title}}</h5>
-            <hr>
-            <p>{{action.content}}</p>
-            <b-spinner v-if="action.busy" small label="Loading..." class="mx-auto mb-3 d-block"></b-spinner>
-            <b-button
-                v-if="action.result"
-                class="mx-auto d-block"
-                @click="download(action.result)"
-            >Download file</b-button>
-        </b-alert>-->
         <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView" @share="share"/>
         <b-list-group class="note-tree-list">
             <b-list-group-item
@@ -30,16 +19,12 @@
                 :active="openId === note._id"
                 @click="openNote(note._id)"
             >
-                <header class="d-flex w-100 justify-content-between">
-                    <h5>{{note.title}}</h5>
-                    <small>{{formatDate(note.created)}}</small>
-                </header>
-                <p class="excerpt mb-1">{{note.value}}</p>
-                <footer>
-                    <b-button variant="danger" size="sm" @click="removeNote(note._id, $event)">
-                        <font-awesome-icon icon="trash"/>
-                    </b-button>
-                </footer>
+                <NoteTreeItem
+                    :title="note.title"
+                    :extra="note.created"
+                    :excerpt="note.value"
+                    @remove="removeNote(note._id, $event)"
+                ></NoteTreeItem>
             </b-list-group-item>
         </b-list-group>
     </aside>
@@ -50,6 +35,7 @@ import Api from "@/api/Api";
 import FileUtil from "@/utils/FileUtil";
 import ActionAlert from "@/components/ActionAlert/ActionAlert";
 import NoteTreeToolbar from "@/components/NoteTreeToolbar/NoteTreeToolbar";
+import NoteTreeItem from "@/components/NoteTreeItem/NoteTreeItem";
 import "./NoteTree.scss";
 
 export default {
@@ -57,7 +43,8 @@ export default {
     props: ["notes"],
     components: {
         ActionAlert,
-        NoteTreeToolbar
+        NoteTreeToolbar,
+        NoteTreeItem
     },
     data() {
         return {

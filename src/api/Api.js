@@ -6,6 +6,7 @@ shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
 const db = PouchDB("mknotes");
+const security = PouchDB("security");
 
 export default {
     async getNotes(decrypt = true) {
@@ -70,5 +71,11 @@ export default {
         const rawDocs = JSON.stringify(docs);
         var blob = new Blob([rawDocs], { type: "application/json" });
         return blob;
-    }
+    },
+    async initSecret(secret) {
+        await db.put({
+            secret: secret
+        });
+    },
+    getSecret() {}
 };

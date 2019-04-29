@@ -22,7 +22,7 @@
                         {{version}}
                     </b-dropdown-item>
                     <b-dropdown-divider/>
-                    <b-dropdown-item href="#" disabled>
+                    <b-dropdown-item href="#" to="/profile">
                         <font-awesome-icon icon="id-badge" class="mr-1"/>
                         {{$t("navbar.profile")}}
                     </b-dropdown-item>

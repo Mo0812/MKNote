@@ -4,7 +4,9 @@ workbox.setConfig({
     debug: true
 });
 
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
+self.__precacheManifest = ["manifest.json"].concat(
+    self.__precacheManifest || []
+);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 

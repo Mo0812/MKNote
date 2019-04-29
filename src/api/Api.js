@@ -73,9 +73,13 @@ export default {
         return blob;
     },
     async initSecret(secret) {
-        await db.put({
-            secret: secret
+        const hash = CryptoUtil.hashString(secret);
+        await security.put({
+            _id: "secret",
+            secret: hash
         });
     },
-    getSecret() {}
+    async getSecret() {
+        return await security.get("secret");
+    }
 };

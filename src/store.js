@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
 import Api from "@/api/Api";
+import CryptoUtil from "@/utils/CryptoUtil";
 
 Vue.use(Vuex);
 
@@ -78,8 +79,28 @@ const actions = {
     settings: (context, payload) => {
         context.commit("SETTINGS", payload);
     },
-    authentificate: (context, payload) => {
-        context.commit("AUTHENTIFICATE", payload);
+    initAuthentification: async (context, payload) => {
+        try {
+            await Api.getSecret();
+            return false;
+        } catch {
+            await Api.initSecret(payload);
+            context.commit("AUTHENTIFICATE", payload);
+            return true;
+        }
+    },
+    authentificate: async (context, payload) => {
+        try {
+            const secret = await Api.getSecret();
+            if (secret.secret === CryptoUtil.hashString(payload)) {
+                context.commit("AUTHENTIFICATE", payload);
+                return true;
+            } else {
+                return false;
+            }
+        } catch {
+            throw new Error("Need init");
+        }
     },
     lock: (context, payload) => {
         context.commit("LOCK");

@@ -1,6 +1,14 @@
 .authentification {
+    .fail {
+        @include shakeAnimation;
+    }
     .icon {
         font-size: 3rem;
+        color: $iconDefaultColor;
+
+        &.fail {
+            color: $iconDangerColor;
+        }
     }
 
     .secret-form {

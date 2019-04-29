@@ -27,6 +27,18 @@
                 @change="onChange"
             />
         </SettingSection>
+        <SettingSection
+            id="settings-crypto"
+            :label="$t('settings.crypto')"
+            labelFor="setting-crypto-input"
+        >
+            <b-input
+                id="secret"
+                type="password"
+                placeholder="Your secret"
+                v-model="security.secret"
+            />
+        </SettingSection>
     </section>
 </template>
 
@@ -43,6 +55,9 @@ export default {
             settings: {
                 lang: null,
                 size: null
+            },
+            security: {
+                secret: null
             },
             options: {
                 lang: [
@@ -70,10 +85,14 @@ export default {
     },
     created() {
         this.getSettings();
+        this.getSecurity();
     },
     methods: {
         getSettings() {
             this.settings = this.$store.getters.getSettings;
+        },
+        getSecurity() {
+            this.security = this.$store.getters.getSecurity;
         },
         onChange(evt) {
             this.$store.dispatch("settings", this.settings);

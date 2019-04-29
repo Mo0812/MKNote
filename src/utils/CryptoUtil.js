@@ -12,5 +12,9 @@ export default {
     _getSecret() {
         const security = store.getters.getSecurity;
         return security.secret;
+    },
+    hashString(str) {
+        const hash = CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex);
+        return hash;
     }
 };

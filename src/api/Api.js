@@ -79,7 +79,21 @@ export default {
             secret: hash
         });
     },
+    async updateSecret(secret) {
+        var storedSecret = await security.get("secret");
+        storedSecret.secret = CryptoUtil.hashString(secret);
+        await security.put(storedSecret);
+    },
     async getSecret() {
         return await security.get("secret");
+    },
+    async renewEncryption(oldSecret) {
+        const notes = await this.getNotes(false);
+        const scope = this;
+        await notes.forEach(async note => {
+            note.title = CryptoUtil.decryptString(note.title, oldSecret);
+            note.value = CryptoUtil.decryptString(note.value, oldSecret);
+            await scope.updateNote(note);
+        });
     }
 };

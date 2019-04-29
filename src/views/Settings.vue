@@ -1,32 +1,34 @@
 <template>
-    <section class="settings mt-3">
+    <section class="settings option-container mt-3">
         <h2>{{$t("settings.title")}}</h2>
-        <SettingSection
-            id="settings-lang"
-            :label="$t('settings.language')"
-            labelFor="setting-lang-select"
-        >
-            <b-form-select
-                v-model="settings.lang"
-                :options="options.lang"
-                :size="settings.size"
-                id="setting-lang-select"
-                @change="onChange"
-            />
-        </SettingSection>
-        <SettingSection
-            id="settings-display-size"
-            :label="$t('settings.displaySize')"
-            labelFor="setting-display-size-select"
-        >
-            <b-form-select
-                v-model="settings.size"
-                :options="options.size"
-                :size="settings.size"
-                id="setting-lang-select"
-                @change="onChange"
-            />
-        </SettingSection>
+        <div class="option-group">
+            <SettingSection
+                id="settings-lang"
+                :label="$t('settings.language')"
+                labelFor="setting-lang-select"
+            >
+                <b-form-select
+                    v-model="settings.lang"
+                    :options="options.lang"
+                    :size="settings.size"
+                    id="setting-lang-select"
+                    @change="onChange"
+                />
+            </SettingSection>
+            <SettingSection
+                id="settings-display-size"
+                :label="$t('settings.displaySize')"
+                labelFor="setting-display-size-select"
+            >
+                <b-form-select
+                    v-model="settings.size"
+                    :options="options.size"
+                    :size="settings.size"
+                    id="setting-lang-select"
+                    @change="onChange"
+                />
+            </SettingSection>
+        </div>
     </section>
 </template>
 

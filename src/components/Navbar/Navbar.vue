@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable="md" type="light" variant="light">
+    <b-navbar toggleable="md" type="light" variant="light" fixed="top">
         <b-navbar-brand href="#">MK Notes</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

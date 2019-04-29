@@ -89,6 +89,11 @@ const actions = {
             return true;
         }
     },
+    renewAuthentification: async (context, payload) => {
+        await Api.updateSecret(payload.newSecret);
+        context.commit("AUTHENTIFICATE", payload.newSecret);
+        await Api.renewEncryption(payload.oldSecret);
+    },
     authentificate: async (context, payload) => {
         try {
             const secret = await Api.getSecret();

@@ -8,6 +8,10 @@
     color: #2c3e50;
     height: 100vh;
     min-height: 100vh;
+
+    & > main {
+        margin-top: calc(56px + 0.5rem);
+    }
 }
 
 .alert {
@@ -16,4 +20,18 @@
     z-index: 100;
     border-radius: 0;
     top: 0;
+}
+
+.option-container {
+    .option-group {
+        & > .header {
+            border-top: 1px solid $bgLightBorder;
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+    }
+}
+
+.shake {
+    @include shakeAnimation;
 }

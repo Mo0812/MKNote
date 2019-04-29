@@ -50,7 +50,7 @@
                         label="Please retype your choosen secret:"
                         label-for="secret-confirm"
                         :state="valid"
-                        invalid-feedback="Given passwords do not match"
+                        invalid-feedback="Given secrets do not match"
                     >
                         <b-form-input
                             id="secret-confirm"
@@ -114,7 +114,6 @@ export default {
                         "initAuthentification",
                         this.secret
                     );
-                    console.log(response);
                 } catch (error) {
                     console.log(error);
                 }

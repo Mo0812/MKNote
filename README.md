@@ -2,13 +2,7 @@
 
 ## Roadmap
 
-* [ ] Syncing with couchDB server
-* [ ] Better UI experience when deleting objects
-* [ ] Export / Import of notes
-* [ ] Mass deletion of notes
-* [ ] Background script for deleting unused attachments
-* [ ] Snippets
-* [ ] Tags, Search, Hotkeys for better UX
+Current wanted features can be found in [ROADMAP.md](ROADMAP.md)
 
 ## Project setup
 ```
@@ -17,23 +11,10 @@ yarn install
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+yarn serve
 ```
 
 ### Compiles and minifies for production
 ```
-yarn run build
+yarn build
 ```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

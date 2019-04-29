@@ -6,6 +6,7 @@ shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
 const db = PouchDB("mknotes");
+const security = PouchDB("security");
 
 export default {
     async getNotes(decrypt = true) {
@@ -70,5 +71,29 @@ export default {
         const rawDocs = JSON.stringify(docs);
         var blob = new Blob([rawDocs], { type: "application/json" });
         return blob;
+    },
+    async initSecret(secret) {
+        const hash = CryptoUtil.hashString(secret);
+        await security.put({
+            _id: "secret",
+            secret: hash
+        });
+    },
+    async updateSecret(secret) {
+        var storedSecret = await security.get("secret");
+        storedSecret.secret = CryptoUtil.hashString(secret);
+        await security.put(storedSecret);
+    },
+    async getSecret() {
+        return await security.get("secret");
+    },
+    async renewEncryption(oldSecret) {
+        const notes = await this.getNotes(false);
+        const scope = this;
+        await notes.forEach(async note => {
+            note.title = CryptoUtil.decryptString(note.title, oldSecret);
+            note.value = CryptoUtil.decryptString(note.value, oldSecret);
+            await scope.updateNote(note);
+        });
     }
 };

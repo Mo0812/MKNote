@@ -19,7 +19,8 @@ import {
     faSignOutAlt,
     faFileExport,
     faFileImport,
-    faCodeBranch
+    faCodeBranch,
+    faLock
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -44,7 +45,8 @@ library.add(
     faSignOutAlt,
     faFileExport,
     faFileImport,
-    faCodeBranch
+    faCodeBranch,
+    faLock
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

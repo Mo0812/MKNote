@@ -6,7 +6,7 @@
         "user": "User",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Sign Out"
+        "lock": "Lock"
     },
     "settings": {
         "title": "Settings",

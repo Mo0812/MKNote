@@ -6,7 +6,7 @@
         "user": "Benutzer",
         "profile": "Profil",
         "settings": "Einstellungen",
-        "logout": "Logout"
+        "lock": "Sperren"
     },
     "settings": {
         "title": "Einstellungen",

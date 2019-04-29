@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
 import Api from "@/api/Api";
+import CryptoUtil from "@/utils/CryptoUtil";
 
 Vue.use(Vuex);
 
@@ -10,12 +11,16 @@ const state = {
     settings: {
         lang: process.env.VUE_APP_I18N_LOCALE || "en",
         size: ""
+    },
+    security: {
+        secret: null
     }
 };
 // const defaultState = state;
 const getters = {
     getNotes: state => state.notes,
-    getSettings: state => state.settings
+    getSettings: state => state.settings,
+    getSecurity: state => state.security
 };
 const mutations = {
     NOTE_INIT: (state, payload) => {
@@ -40,6 +45,14 @@ const mutations = {
     },
     SETTINGS: (state, payload) => {
         state.settings = payload;
+    },
+    AUTHENTIFICATE: (state, payload) => {
+        const security = state.security;
+        security.secret = payload;
+    },
+    LOCK: (state, payload) => {
+        const security = state.security;
+        security.secret = null;
     }
 };
 const actions = {
@@ -65,6 +78,37 @@ const actions = {
     },
     settings: (context, payload) => {
         context.commit("SETTINGS", payload);
+    },
+    initAuthentification: async (context, payload) => {
+        try {
+            await Api.getSecret();
+            return false;
+        } catch {
+            await Api.initSecret(payload);
+            context.commit("AUTHENTIFICATE", payload);
+            return true;
+        }
+    },
+    renewAuthentification: async (context, payload) => {
+        await Api.updateSecret(payload.newSecret);
+        context.commit("AUTHENTIFICATE", payload.newSecret);
+        await Api.renewEncryption(payload.oldSecret);
+    },
+    authentificate: async (context, payload) => {
+        try {
+            const secret = await Api.getSecret();
+            if (secret.secret === CryptoUtil.hashString(payload)) {
+                context.commit("AUTHENTIFICATE", payload);
+                return true;
+            } else {
+                return false;
+            }
+        } catch {
+            throw new Error("Need init");
+        }
+    },
+    lock: (context, payload) => {
+        context.commit("LOCK");
     }
 };
 

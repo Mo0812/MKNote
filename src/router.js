@@ -26,6 +26,11 @@ export default new Router({
             path: "/settings",
             name: "settings",
             component: () => import("./views/Settings.vue")
+        },
+        {
+            path: "/profile",
+            name: "profile",
+            component: () => import("./views/Profile.vue")
         }
     ]
 });

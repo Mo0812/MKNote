@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable="md" type="light" variant="light">
+    <b-navbar toggleable="md" type="light" variant="light" fixed="top">
         <b-navbar-brand href="#">MK Notes</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -22,7 +22,7 @@
                         {{version}}
                     </b-dropdown-item>
                     <b-dropdown-divider/>
-                    <b-dropdown-item href="#" disabled>
+                    <b-dropdown-item href="#" to="/profile">
                         <font-awesome-icon icon="id-badge" class="mr-1"/>
                         {{$t("navbar.profile")}}
                     </b-dropdown-item>
@@ -30,9 +30,9 @@
                         <font-awesome-icon icon="cog" class="mr-1"/>
                         {{$t("navbar.settings")}}
                     </b-dropdown-item>
-                    <b-dropdown-item href="#" disabled>
-                        <font-awesome-icon icon="sign-out-alt" class="mr-1"/>
-                        {{$t("navbar.logout")}}
+                    <b-dropdown-item href="#" @click="lock">
+                        <font-awesome-icon icon="lock" class="mr-1"/>
+                        {{$t("navbar.lock")}}
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -46,6 +46,11 @@ export default {
     computed: {
         version() {
             return "Version: " + process.env.VUE_APP_VERSION;
+        }
+    },
+    methods: {
+        lock() {
+            this.$store.dispatch("lock");
         }
     }
 };

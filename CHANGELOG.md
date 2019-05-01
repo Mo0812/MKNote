@@ -1,4 +1,4 @@
-# [0.2.1] - 2019-05-01
+# [v0.2.1] - 2019-05-01
 
 Update to enable release notes in Github.
 

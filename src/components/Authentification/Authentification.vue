@@ -102,6 +102,9 @@ export default {
                 if (!response && validCheck) {
                     this.valid = false;
                 }
+                if (response) {
+                    this.$router.push("/");
+                }
             } catch (error) {
                 this.init = true;
                 this.secret = "";
@@ -114,6 +117,9 @@ export default {
                         "initAuthentification",
                         this.secret
                     );
+                    if (response) {
+                        this.$router.push("/about");
+                    }
                 } catch (error) {
                     console.log(error);
                 }

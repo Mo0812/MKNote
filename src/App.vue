@@ -6,8 +6,7 @@
         <template>
             <main class="flex-fill">
                 <b-container class="h-100" fluid>
-                    <router-view v-if="unlocked"/>
-                    <Authentification v-else/>
+                    <router-view/>
                 </b-container>
             </main>
         </template>
@@ -16,18 +15,10 @@
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
-import Authentification from "@/components/Authentification/Authentification";
 
 export default {
     components: {
-        Navbar,
-        Authentification
-    },
-    computed: {
-        unlocked() {
-            const security = this.$store.getters.getSecurity;
-            return security.secret !== null;
-        }
+        Navbar
     }
 };
 </script>

@@ -6,12 +6,12 @@
 
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <b-nav-item href="#" to="/">{{$t("navbar.notes")}}</b-nav-item>
+                <b-nav-item href="#" to="/" :disabled="!unlocked">{{$t("navbar.notes")}}</b-nav-item>
                 <b-nav-item href="#" to="/snippets" disabled>{{$t("navbar.snippets")}}</b-nav-item>
                 <b-nav-item href="#" to="/about">{{$t("navbar.about")}}</b-nav-item>
             </b-navbar-nav>
 
-            <b-navbar-nav class="ml-auto">
+            <b-navbar-nav class="ml-auto" v-if="unlocked">
                 <b-nav-item-dropdown right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user-circle" class="mr-1"/>
@@ -46,11 +46,16 @@ export default {
     computed: {
         version() {
             return "Version: " + process.env.VUE_APP_VERSION;
+        },
+        unlocked() {
+            const security = this.$store.getters.getSecurity;
+            return security.secret !== null;
         }
     },
     methods: {
-        lock() {
-            this.$store.dispatch("lock");
+        async lock() {
+            await this.$store.dispatch("lock");
+            this.$router.push("/lockscreen");
         }
     }
 };

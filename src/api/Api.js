@@ -5,7 +5,7 @@ import CryptoUtil from "@/utils/CryptoUtil";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
-const db = PouchDB("mknotes");
+const db = PouchDB("http://localhost:5984/mknotes");
 const security = PouchDB("security");
 
 export default {

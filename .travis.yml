@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+    - "11"
+
+cache: yarn
+
+install: yarn
+script:
+    - yarn build

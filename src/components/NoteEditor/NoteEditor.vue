@@ -24,7 +24,13 @@
             ></b-form-input>
             <textarea id="md-textarea" ref="mdtextarea"/>
         </div>
-        <h2 v-else>Wählen Sie zuerst eine Notiz aus oder erstellen Sie eine neue Notiz</h2>
+        <div v-else class="h-100">
+            <b-row class="h-100 justify-content-center align-items-center text-center">
+                <b-col cols="12">
+                    <h3>{{$t("notes.editor.emptyMessage")}}</h3>
+                </b-col>
+            </b-row>
+        </div>
     </section>
 </template>
 

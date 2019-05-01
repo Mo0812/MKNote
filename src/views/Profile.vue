@@ -2,10 +2,10 @@
     <section class="profile option-container mt-3">
         <h2>{{$t("profile.title")}}</h2>
         <div class="option-group">
-            <h3 class="header">{{$t("profile.encryption")}}</h3>
+            <h3 class="header">{{$t("profile.encryption.title")}}</h3>
             <SettingSection
                 id="profile-encryption-renew-secret-group"
-                :label="$t('profile.renewSecret')"
+                :label="$t('profile.encryption.renewSecret')"
             >
                 <template v-if="!security.success">
                     <b-input-group v-if="!security.renew">
@@ -13,13 +13,16 @@
                             id="profile-encryption-renew-current-secret"
                             :class="validClass"
                             type="password"
-                            placeholder="Your current secret"
+                            :placeholder="$t('profile.encryption.currentSecretInputPlaceholder')"
                             :state="security.valid"
                             :disabled="!encryptionEnabled"
                             v-model="security.currentSecret"
                         />
                         <b-input-group-append>
-                            <b-button variant="warning" @click="validateSecret">Renew</b-button>
+                            <b-button
+                                variant="warning"
+                                @click="validateSecret"
+                            >{{$t("profile.encryption.currentSecretButtonText")}}</b-button>
                         </b-input-group-append>
                     </b-input-group>
                     <template v-else>
@@ -28,7 +31,7 @@
                             type="password"
                             class="my-1"
                             :class="validClass"
-                            placeholder="Your new secret"
+                            :placeholder="$t('profile.encryption.newSecretInputPlaceholder')"
                             :disabled="!encryptionEnabled"
                             :state="security.valid"
                             v-model="security.newSecret"
@@ -39,7 +42,7 @@
                                 id="profile-encryption-renew-new-secret-confirm"
                                 type="password"
                                 :class="validClass"
-                                placeholder="Confirm your new secret"
+                                :placeholder="$t('profile.encryption.newSecretConfirmInputPlaceholder')"
                                 :disabled="!encryptionEnabled"
                                 :state="security.valid"
                                 v-model="security.newSecretConfirm"
@@ -49,9 +52,14 @@
                                     <template v-if="security.busy">
                                         <b-spinner></b-spinner>
                                     </template>
-                                    <template v-else>Renew</template>
+                                    <template
+                                        v-else
+                                    >{{$t("profile.encryption.newSecretButtonText")}}</template>
                                 </b-button>
-                                <b-button variant="secondary" @click="abortSecretRenewal">Cancel</b-button>
+                                <b-button
+                                    variant="secondary"
+                                    @click="abortSecretRenewal"
+                                >{{$t("common.cancel")}}</b-button>
                             </b-input-group-append>
                         </b-input-group>
                     </template>

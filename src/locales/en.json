@@ -1,4 +1,8 @@
 {
+    "common": {
+        "cancel": "Cancel",
+        "sure": "Sure?"
+    },
     "navbar": {
         "notes": "Notes",
         "snippets": "Snippets",
@@ -12,5 +16,37 @@
         "title": "Settings",
         "language": "Language",
         "displaySize": "Display size"
+    },
+    "authentification": {
+        "lockScreen": {
+            "message": "Please enter your secret to unlock the encrypted content:",
+            "unlockInputPlaceholder": "Your secret",
+            "unlockButtonText": "Submit"
+        },
+        "initScreen": {
+            "message": "Before you start, you must to enter a secret which protects and encrypts your note data",
+            "secretInputLabel": "Please set a encryption secret initally:",
+            "secretInputPlaceholder": "Your secret",
+            "secretConfirmInputLabel": "Please retype your choosen secret:",
+            "secretConfirmInputPlaceholder": "Confirm your secret",
+            "initButtonText": "Confirm"
+        }
+    },
+    "profile": {
+        "title": "Profile",
+        "encryption": {
+            "title": "Encryption",
+            "renewSecret": "Renew your secret",
+            "currentSecretInputPlaceholder": "Your current secret",
+            "currentSecretButtonText": "Renew",
+            "newSecretInputPlaceholder": "Your new secret",
+            "newSecretConfirmInputPlaceholder": "Confirm your new secret",
+            "newSecretButtonText": "Confirm"
+        }
+    },
+    "notes": {
+        "editor": {
+            "emptyMessage": "Please choose a note or create one to begin"
+        }
     }
 }

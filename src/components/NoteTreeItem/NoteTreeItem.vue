@@ -8,7 +8,7 @@
         <footer>
             <b-button variant="danger" size="sm" @click="removeAction($event)">
                 <font-awesome-icon v-if="!remove.confirm" icon="trash"/>
-                <template v-else>Sure?</template>
+                <template v-else>{{$t("common.sure")}}</template>
             </b-button>
             <b-button
                 v-if="remove.confirm"

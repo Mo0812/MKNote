@@ -1,6 +1,10 @@
 {
+    "common": {
+        "cancel": "Abbrechen",
+        "sure": "Sicher?"
+    },
     "navbar": {
-        "notes": "Notes",
+        "notes": "Notizen",
         "snippets": "Snippets",
         "about": "Über",
         "user": "Benutzer",
@@ -12,5 +16,37 @@
         "title": "Einstellungen",
         "language": "Sprache",
         "displaySize": "Anzeigegröße"
+    },
+    "authentification": {
+        "lockScreen": {
+            "message": "Bitte gebe dein Passwort ein, um deine Daten zu entschlüsseln:",
+            "unlockInputPlaceholder": "Dein Passwort",
+            "unlockButtonText": "Entschlüsseln"
+        },
+        "initScreen": {
+            "message": "Vor deiner ersten Nutzung, musst du ein Passwort setzen, welches deine Notizen schützt und verschlüsselt",
+            "secretInputLabel": "Bitt gebe ein initiales Verschlüsselungspasswort ein:",
+            "secretInputPlaceholder": "Dein Passwort",
+            "secretConfirmInputLabel": "Bitte wiederhole das Passwort:",
+            "secretConfirmInputPlaceholder": "Bestätige dein Passwirt",
+            "initButtonText": "Beginnen"
+        }
+    },
+    "profile": {
+        "title": "Profil",
+        "encryption": {
+            "title": "Verschlüsselung",
+            "renewSecret": "Passwort erneuern",
+            "currentSecretInputPlaceholder": "Dein aktuelles Passwort",
+            "currentSecretButtonText": "Erneuern",
+            "newSecretInputPlaceholder": "Wähle ein neues Passwort",
+            "newSecretConfirmInputPlaceholder": "Bestätige dein neues Passwort",
+            "newSecretButtonText": "Erneuern"
+        }
+    },
+    "notes": {
+        "editor": {
+            "emptyMessage": "Wählen Sie zuerst eine Notiz aus oder erstellen Sie eine neue Notiz"
+        }
     }
 }

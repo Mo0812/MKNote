@@ -6,7 +6,7 @@
                 <b-form @submit.prevent="authentificate" class="secret-form">
                     <b-form-group
                         id="secret-group"
-                        label="Please enter your secret to unlock the encrypted content:"
+                        :label="$t('authentification.lockScreen.message')"
                         label-for="secret"
                         :state="valid"
                         invalid-feedback="Secret was not correct"
@@ -14,17 +14,21 @@
                         <b-form-input
                             id="secret"
                             type="password"
-                            placeholder="Your secret"
+                            :placeholder="$t('authentification.lockScreen.unlockInputPlaceholder')"
                             :state="valid"
                             v-model="secret"
                         />
                     </b-form-group>
-                    <b-button type="submit" variant="primary" class="secret-submit">Submit</b-button>
+                    <b-button
+                        type="submit"
+                        variant="primary"
+                        class="secret-submit"
+                    >{{$t("authentification.lockScreen.unlockButtonText")}}</b-button>
                 </b-form>
             </template>
             <template v-else>
                 <h3>MK Note</h3>
-                <p>Before you start, you must to enter a secret which protects and encrypts your note data</p>
+                <p>{{$t("authentification.initScreen.message")}}</p>
                 <hr>
                 <b-form
                     @submit.prevent="initAuthentification"
@@ -33,21 +37,21 @@
                 >
                     <b-form-group
                         id="secret-group"
-                        label="Please set a encryption secret initally:"
+                        :label="$t('authentification.initScreen.secretInputLabel')"
                         label-for="secret"
                         :state="valid"
                     >
                         <b-form-input
                             id="secret"
                             type="password"
-                            placeholder="Your secret"
+                            :placeholder="$t('authentification.initScreen.secretInputPlaceholder')"
                             :state="valid"
                             v-model="secret"
                         />
                     </b-form-group>
                     <b-form-group
                         id="secret-confirm-group"
-                        label="Please retype your choosen secret:"
+                        :label="$t('authentification.initScreen.secretConfirmInputLabel')"
                         label-for="secret-confirm"
                         :state="valid"
                         invalid-feedback="Given secrets do not match"
@@ -55,14 +59,22 @@
                         <b-form-input
                             id="secret-confirm"
                             type="password"
-                            placeholder="Confirm your secret"
+                            :placeholder="$t('authentification.initScreen.secretConfirmInputPlaceholder')"
                             :state="valid"
                             v-model="secretConfirm"
                         />
                     </b-form-group>
-                    <b-button type="submit" variant="primary" class="secret-submit">Submit</b-button>
+                    <b-button
+                        type="submit"
+                        variant="primary"
+                        class="secret-submit"
+                    >{{$t("authentification.initScreen.initButtonText")}}</b-button>
                 </b-form>
             </template>
+            <footer class="mt-5 mx-auto w-50">
+                <hr>
+                <b-link to="/about">{{$t("navbar.about")}}</b-link>
+            </footer>
         </b-col>
     </b-row>
 </template>

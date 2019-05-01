@@ -1,43 +1,57 @@
 <template>
     <section class="about mt-3">
         <b-row>
-            <b-col cols="12">
-                <h2>About</h2>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col cols="12">
-                <h3 class="text-center">What is MK Notes?</h3>
-                <p class="text-center">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
-                </p>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col cols="6">
-                <h3 class="text-center">Release Notes</h3>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            </b-col>
-            <b-col cols="6">
-                <Roadmap/>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col cols="12">
-                <h3 class="text-center">Manual</h3>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <b-col cols="12" md="6" offset-md="3">
+                <b-row>
+                    <b-col cols="12">
+                        <h2 class="text-center">About</h2>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="12" class="my-3">
+                        <h3 class="text-center">What is MK Notes?</h3>
+                        <p>
+                            <i>MK Notes</i> is a simple note manager, which uses Markdown as a markup language.
+                        </p>
+                        <p>
+                            Whats special about
+                            <i>MK Notes</i> is, that it runs totaly local on your machine. All your note data is stored into your browsers local storage systems and gets encrypted with an AES encryption. In addition to that once you visited this site,
+                            <i>MK Notes</i> installs itself as a
+                            <i>Progressive Web App (PWA)</i>, which means you can use it even without a connection to the internet for days.
+                        </p>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="12" md="6" class="my-5">
+                        <GithubContent
+                            title="Release Notes"
+                            url="https://raw.githubusercontent.com/Mo0812/MKNote/master/CHANGELOG.md"
+                        />
+                    </b-col>
+                    <b-col cols="12" md="6" class="my-5">
+                        <GithubContent
+                            title="Roadmap"
+                            url="https://raw.githubusercontent.com/Mo0812/MKNote/master/ROADMAP.md"
+                        />
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="12" class="my-5">
+                        <h3 class="text-center">Manual</h3>
+                        <p class="text-center">More to come</p>
+                    </b-col>
+                </b-row>
             </b-col>
         </b-row>
     </section>
 </template>
 
 <script>
-import Roadmap from "@/components/Roadmap/Roadmap";
+import GithubContent from "@/components/GithubContent/GithubContent";
 export default {
     name: "about",
     components: {
-        Roadmap
+        GithubContent
     }
 };
 </script>

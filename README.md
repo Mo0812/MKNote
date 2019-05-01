@@ -1,4 +1,8 @@
 # mk-notes
+![Travis (.org)](https://img.shields.io/travis/Mo0812/MKNotes.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/46c7b20ca75049faa16b17dbae04a6a5)](https://www.codacy.com/app/Mo0812/MKNote?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Mo0812/MKNote&amp;utm_campaign=Badge_Grade)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/Mo0812/MKNote.svg)
+![GitHub](https://img.shields.io/github/license/Mo0812/MKNote.svg)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7e95ab40-6d50-4391-b42f-27f15aad7ce1/deploy-status)](https://app.netlify.com/sites/romantic-torvalds-50b43f/deploys)
 
 ## Roadmap

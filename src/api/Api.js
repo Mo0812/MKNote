@@ -99,8 +99,7 @@ export default {
     },
     async updateRemoteConnection(enabled, url, live) {
         if (enabled) {
-            const response = await this._cancelRemoteConnection();
-            console.log(response);
+            await this._cancelRemoteConnection();
             const remoteDB = PouchDB(url); // http://localhost:5984/mknotes
             this.syncHandler = db
                 .sync(remoteDB, {

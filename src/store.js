@@ -14,13 +14,19 @@ const state = {
     },
     security: {
         secret: null
+    },
+    remote: {
+        enabled: false,
+        url: null,
+        liveSync: true
     }
 };
 // const defaultState = state;
 const getters = {
     getNotes: state => state.notes,
     getSettings: state => state.settings,
-    getSecurity: state => state.security
+    getSecurity: state => state.security,
+    getRemote: state => state.remote
 };
 const mutations = {
     NOTE_INIT: (state, payload) => {
@@ -45,6 +51,9 @@ const mutations = {
     },
     SETTINGS: (state, payload) => {
         state.settings = payload;
+    },
+    REMOTE: (state, payload) => {
+        state.remote = payload;
     },
     AUTHENTIFICATE: (state, payload) => {
         const security = state.security;
@@ -78,6 +87,14 @@ const actions = {
     },
     settings: (context, payload) => {
         context.commit("SETTINGS", payload);
+    },
+    remote: async (context, payload) => {
+        await Api.updateRemoteConnection(
+            payload.enabled,
+            payload.url,
+            payload.liveSync
+        );
+        context.commit("REMOTE", payload);
     },
     initAuthentification: async (context, payload) => {
         try {

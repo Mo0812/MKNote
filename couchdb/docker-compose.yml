@@ -1,9 +1,0 @@
-version: "3"
-services:
-  couchdb:
-    build: .
-    container_name: couch_db
-    ports:
-      - 5984:5984
-    stdin_open: true
-    tty: true

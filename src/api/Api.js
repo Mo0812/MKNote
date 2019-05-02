@@ -97,9 +97,10 @@ export default {
             await scope.updateNote(note);
         });
     },
-    updateRemoteConnection(enabled, url, live) {
+    async updateRemoteConnection(enabled, url, live) {
         if (enabled) {
-            this._cancelRemoteConnection;
+            const response = await this._cancelRemoteConnection();
+            console.log(response);
             const remoteDB = PouchDB(url); // http://localhost:5984/mknotes
             this.syncHandler = db
                 .sync(remoteDB, {
@@ -119,16 +120,21 @@ export default {
                     console.log("CouchDB sync: error", error);
                 });
         } else {
-            this._cancelRemoteConnection();
+            console.log(await this._cancelRemoteConnection());
         }
     },
     _cancelRemoteConnection() {
-        if (this.syncHandler !== null) {
-            this.syncHandler.cancel();
-            this.syncHandler.on("complete", info => {
-                console.log("CouchDB sync: canceled", info);
-                this.syncHandler = null;
-            });
-        }
+        return new Promise((resolve, reject) => {
+            if (this.syncHandler !== null) {
+                this.syncHandler.cancel();
+                this.syncHandler.on("complete", info => {
+                    console.log("CouchDB sync: canceled", info);
+                    this.syncHandler = null;
+                    resolve("Cancelation complete");
+                });
+            } else {
+                resolve("No cancelation needed");
+            }
+        });
     }
 };

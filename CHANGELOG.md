@@ -1,3 +1,11 @@
+# [0.4.0] - 2019-05-03
+
+Strict seperation between State, Api and IndexedDB + Remote ability
+
+# [0.3.0] - 2019-05-01
+
+Enable About page
+
 # [v0.2.1] - 2019-05-01
 
 Update to enable release notes in Github.

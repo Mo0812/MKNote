@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
+import i18n from "@/i18n";
 import Api from "@/api/Api";
 import CryptoUtil from "@/utils/CryptoUtil";
 
@@ -14,13 +15,19 @@ const state = {
     },
     security: {
         secret: null
+    },
+    remote: {
+        enabled: false,
+        url: null,
+        liveSync: true
     }
 };
 // const defaultState = state;
 const getters = {
     getNotes: state => state.notes,
     getSettings: state => state.settings,
-    getSecurity: state => state.security
+    getSecurity: state => state.security,
+    getRemote: state => state.remote
 };
 const mutations = {
     NOTE_INIT: (state, payload) => {
@@ -44,7 +51,11 @@ const mutations = {
         state.notes = notes;
     },
     SETTINGS: (state, payload) => {
+        i18n.locale = payload.lang;
         state.settings = payload;
+    },
+    REMOTE: (state, payload) => {
+        state.remote = payload;
     },
     AUTHENTIFICATE: (state, payload) => {
         const security = state.security;
@@ -56,6 +67,21 @@ const mutations = {
     }
 };
 const actions = {
+    initStore: async (context, payload) => {
+        console.log("init");
+        try {
+            const settings = await Api.getSettings();
+            context.commit("SETTINGS", settings);
+        } catch (error) {
+            console.log(error);
+        }
+        try {
+            const remote = await Api.getRemote();
+            context.commit("REMOTE", remote);
+        } catch (error) {
+            console.log(error);
+        }
+    },
     initNotes: (context, payload) => {
         Api.getNotes().then(docs => {
             context.commit("NOTE_INIT", docs);
@@ -76,8 +102,17 @@ const actions = {
             context.commit("NOTE_REMOVE", payload);
         });
     },
-    settings: (context, payload) => {
+    settings: async (context, payload) => {
+        await Api.setSettings(payload);
         context.commit("SETTINGS", payload);
+    },
+    remote: async (context, payload) => {
+        await Api.updateRemoteConnection(
+            payload.enabled,
+            payload.url,
+            payload.liveSync
+        );
+        context.commit("REMOTE", payload);
     },
     initAuthentification: async (context, payload) => {
         try {
@@ -121,6 +156,6 @@ export default new Vuex.Store({
     state: state,
     getters: getters,
     mutations: mutations,
-    actions: actions,
-    plugins: [vuexPersist.plugin]
+    actions: actions
+    // plugins: [vuexPersist.plugin]
 });

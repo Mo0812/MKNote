@@ -73,7 +73,35 @@
                 </template>
             </SettingSection>
         </div>
-        <div class="option-group"></div>
+        <div class="option-group">
+            <h3 class="header">Remote & Sync</h3>
+            <SettingSection id="profile-remote-enable-sync-group" label="Enable remote sync">
+                <b-checkbox
+                    v-model="remote.enabled"
+                    name="profile-remote-enable-sync"
+                    switch
+                    @input="updateRemote"
+                >Remote sync</b-checkbox>
+            </SettingSection>
+            <SettingSection id="profile-remote-url-group" label="Remote instance URL">
+                <b-input
+                    v-model="remote.url"
+                    name="profile-remote-url"
+                    placeholder="Remote URL"
+                    :disabled="!remote.enabled"
+                    @input="updateRemote"
+                />
+            </SettingSection>
+            <SettingSection id="profile-remote-live-sync-group" label="Enable live sync">
+                <b-checkbox
+                    v-model="remote.liveSync"
+                    name="profile-remote-live-sync"
+                    :disabled="!remote.enabled"
+                    switch
+                    @input="updateRemote"
+                >Live sync</b-checkbox>
+            </SettingSection>
+        </div>
     </section>
 </template>
 
@@ -104,6 +132,11 @@ export default {
                 busy: false,
                 success: false,
                 valid: null
+            },
+            remote: {
+                enabled: false,
+                url: null,
+                liveSync: true
             }
         };
     },
@@ -119,11 +152,23 @@ export default {
         }
     },
     created() {
-        // this.getSecurity();
+        this.getRemote();
     },
     methods: {
         getSecurity() {
             this.security = this.$store.getters.getSecurity;
+        },
+        async validateSecret() {
+            this.security.valid = null;
+            const response = await this.$store.dispatch(
+                "authentificate",
+                this.security.currentSecret
+            );
+            this.security.valid = response === true ? null : false;
+            this.security.renew = response;
+        },
+        getRemote() {
+            this.remote = this.$store.getters.getRemote;
         },
         async validateSecret() {
             this.security.valid = null;
@@ -155,6 +200,9 @@ export default {
         },
         abortSecretRenewal() {
             Object.assign(this.security, this.defaultSecurity);
+        },
+        async updateRemote() {
+            await this.$store.dispatch("remote", this.remote);
         }
     }
 };

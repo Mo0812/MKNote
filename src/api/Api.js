@@ -5,10 +5,13 @@ import CryptoUtil from "@/utils/CryptoUtil";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
-const db = PouchDB("mknotes");
-const security = PouchDB("security");
+const db = PouchDB("mknote-notes");
+const security = PouchDB("mknote-security");
+const settings = PouchDB("mknote-settings");
+const remote = PouchDB("mknote-remote");
 
 export default {
+    syncHandler: null,
     async getNotes(decrypt = true) {
         const records = await db.allDocs({
             include_docs: true,
@@ -94,6 +97,82 @@ export default {
             note.title = CryptoUtil.decryptString(note.title, oldSecret);
             note.value = CryptoUtil.decryptString(note.value, oldSecret);
             await scope.updateNote(note);
+        });
+    },
+    async getSettings() {
+        const currentSettings = await settings.get("settings");
+        return currentSettings.settings;
+    },
+    async setSettings(newSettings) {
+        try {
+            const currentSettings = await settings.get("settings");
+            currentSettings.settings = newSettings;
+            await settings.put(currentSettings);
+        } catch (error) {
+            await settings.put({
+                _id: "settings",
+                settings: newSettings
+            });
+        }
+    },
+    async getRemote() {
+        try {
+            const currentRemote = await remote.get("remote");
+            return currentRemote.remote;
+        } catch (error) {
+            throw error;
+        }
+    },
+    async setRemote(newRemote) {
+        try {
+            const currentRemote = await remote.get("remote");
+            currentRemote.remote = newRemote;
+            await remote.put(currentRemote);
+        } catch (error) {
+            await remote.put({
+                _id: "remote",
+                remote: newRemote
+            });
+        }
+    },
+    async updateRemoteConnection(enabled, url, live) {
+        if (enabled) {
+            await this._cancelRemoteConnection();
+            const remoteDB = PouchDB(url); // http://localhost:5984/mknotes
+            this.syncHandler = db
+                .sync(remoteDB, {
+                    live: live,
+                    retry: true
+                })
+                .on("change", change => {
+                    console.log("CouchDB sync: change", change);
+                })
+                .on("paused", info => {
+                    console.log("CouchDB sync: paused", info);
+                })
+                .on("active", info => {
+                    console.log("CouchDB sync: active", info);
+                })
+                .on("error", error => {
+                    console.log("CouchDB sync: error", error);
+                });
+        } else {
+            console.log(await this._cancelRemoteConnection());
+        }
+        this.setRemote({ enabled: enabled, url: url, live: live });
+    },
+    _cancelRemoteConnection() {
+        return new Promise((resolve, reject) => {
+            if (this.syncHandler !== null) {
+                this.syncHandler.cancel();
+                this.syncHandler.on("complete", info => {
+                    console.log("CouchDB sync: canceled", info);
+                    this.syncHandler = null;
+                    resolve("Cancelation complete");
+                });
+            } else {
+                resolve("No cancelation needed");
+            }
         });
     }
 };

@@ -1,6 +1,9 @@
 # Roadmap
 
-* [ ] Syncing with couchDB server
+* [ ] Enable test cases
+* [ ] Enable secret remote propagation
+* [ ] Clear error and try/catch handling
+* [x] Syncing with couchDB server
 * [x] Better UI experience when deleting objects
 * [x] Export of notes
 * [ ] Import of notes
@@ -9,5 +12,5 @@
 * [ ] Snippets
 * [ ] Tags, Search, Hotkeys for better UX
 * [x] Encrypt notes content in IndexedDB
-* [ ] Stop using LocalStorage for Vuex
-* [ ] Encryption secret handling
+* [x] Stop using LocalStorage for Vuex
+* [x] Encryption secret handling

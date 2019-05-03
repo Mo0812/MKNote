@@ -29,8 +29,8 @@ import "./registerServiceWorker";
 
 Vue.use(BootstrapVue);
 
-const settings = store.getters.getSettings;
-moment.locale(settings.lang);
+store.dispatch("initStore");
+
 Vue.prototype.$moment = moment;
 
 library.add(

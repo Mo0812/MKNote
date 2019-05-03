@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
+import i18n from "@/i18n";
 import Api from "@/api/Api";
 import CryptoUtil from "@/utils/CryptoUtil";
 
@@ -50,6 +51,7 @@ const mutations = {
         state.notes = notes;
     },
     SETTINGS: (state, payload) => {
+        i18n.locale = payload.lang;
         state.settings = payload;
     },
     REMOTE: (state, payload) => {
@@ -65,6 +67,21 @@ const mutations = {
     }
 };
 const actions = {
+    initStore: async (context, payload) => {
+        console.log("init");
+        try {
+            const settings = await Api.getSettings();
+            context.commit("SETTINGS", settings);
+        } catch (error) {
+            console.log(error);
+        }
+        try {
+            const remote = await Api.getRemote();
+            context.commit("REMOTE", remote);
+        } catch (error) {
+            console.log(error);
+        }
+    },
     initNotes: (context, payload) => {
         Api.getNotes().then(docs => {
             context.commit("NOTE_INIT", docs);
@@ -85,7 +102,8 @@ const actions = {
             context.commit("NOTE_REMOVE", payload);
         });
     },
-    settings: (context, payload) => {
+    settings: async (context, payload) => {
+        await Api.setSettings(payload);
         context.commit("SETTINGS", payload);
     },
     remote: async (context, payload) => {
@@ -138,6 +156,6 @@ export default new Vuex.Store({
     state: state,
     getters: getters,
     mutations: mutations,
-    actions: actions,
-    plugins: [vuexPersist.plugin]
+    actions: actions
+    // plugins: [vuexPersist.plugin]
 });

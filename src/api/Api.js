@@ -5,8 +5,10 @@ import CryptoUtil from "@/utils/CryptoUtil";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
-const db = PouchDB("mknotes");
-const security = PouchDB("security");
+const db = PouchDB("mknote-notes");
+const security = PouchDB("mknote-security");
+const settings = PouchDB("mknote-settings");
+const remote = PouchDB("mknote-remote");
 
 export default {
     syncHandler: null,
@@ -97,6 +99,42 @@ export default {
             await scope.updateNote(note);
         });
     },
+    async getSettings() {
+        const currentSettings = await settings.get("settings");
+        return currentSettings.settings;
+    },
+    async setSettings(newSettings) {
+        try {
+            const currentSettings = await settings.get("settings");
+            currentSettings.settings = newSettings;
+            await settings.put(currentSettings);
+        } catch (error) {
+            await settings.put({
+                _id: "settings",
+                settings: newSettings
+            });
+        }
+    },
+    async getRemote() {
+        try {
+            const currentRemote = await remote.get("remote");
+            return currentRemote.remote;
+        } catch (error) {
+            throw error;
+        }
+    },
+    async setRemote(newRemote) {
+        try {
+            const currentRemote = await remote.get("remote");
+            currentRemote.remote = newRemote;
+            await remote.put(currentRemote);
+        } catch (error) {
+            await remote.put({
+                _id: "remote",
+                remote: newRemote
+            });
+        }
+    },
     async updateRemoteConnection(enabled, url, live) {
         if (enabled) {
             await this._cancelRemoteConnection();
@@ -121,6 +159,7 @@ export default {
         } else {
             console.log(await this._cancelRemoteConnection());
         }
+        this.setRemote({ enabled: enabled, url: url, live: live });
     },
     _cancelRemoteConnection() {
         return new Promise((resolve, reject) => {

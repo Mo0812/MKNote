@@ -70,14 +70,19 @@ const actions = {
     initStore: async (context, payload) => {
         console.log("init");
         try {
-            const settings = await Api.getSettings();
-            context.commit("SETTINGS", settings);
+            const remote = await Api.getRemote();
+            context.commit("REMOTE", remote);
+            try {
+                await Api.updateRemoteConnections(remote.enabled, remote.url);
+            } catch (error) {
+                console.log(error);
+            }
         } catch (error) {
             console.log(error);
         }
         try {
-            const remote = await Api.getRemote();
-            context.commit("REMOTE", remote);
+            const settings = await Api.getSettings();
+            context.commit("SETTINGS", settings);
         } catch (error) {
             console.log(error);
         }
@@ -107,11 +112,7 @@ const actions = {
         context.commit("SETTINGS", payload);
     },
     remote: async (context, payload) => {
-        await Api.updateRemoteConnection(
-            payload.enabled,
-            payload.url,
-            payload.liveSync
-        );
+        await Api.updateRemoteConnections(payload.enabled, payload.url);
         context.commit("REMOTE", payload);
     },
     initAuthentification: async (context, payload) => {

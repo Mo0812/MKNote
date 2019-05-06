@@ -70,16 +70,14 @@ const actions = {
     initStore: async (context, payload) => {
         console.log("init");
         try {
+            const remote = await Api.getRemote();
+            context.commit("REMOTE", remote);
+            await Api.updateRemoteConnections(remote.enabled, remote.url);
+
             const settings = await Api.getSettings();
             context.commit("SETTINGS", settings);
         } catch (error) {
-            console.log(error);
-        }
-        try {
-            const remote = await Api.getRemote();
-            context.commit("REMOTE", remote);
-        } catch (error) {
-            console.log(error);
+            throw error;
         }
     },
     initNotes: (context, payload) => {
@@ -107,12 +105,12 @@ const actions = {
         context.commit("SETTINGS", payload);
     },
     remote: async (context, payload) => {
-        await Api.updateRemoteConnection(
-            payload.enabled,
-            payload.url,
-            payload.liveSync
-        );
-        context.commit("REMOTE", payload);
+        try {
+            await Api.updateRemoteConnections(payload.enabled, payload.url);
+            context.commit("REMOTE", payload);
+        } catch (error) {
+            throw error;
+        }
     },
     initAuthentification: async (context, payload) => {
         try {

@@ -1,6 +1,7 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
 import CryptoUtil from "@/utils/CryptoUtil";
+import RemoteConnectionError from "@/error/RemoteConnectionError";
 
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
@@ -10,8 +11,16 @@ const security = PouchDB("mknote-security");
 const settings = PouchDB("mknote-settings");
 const remote = PouchDB("mknote-remote");
 
+const databases = {
+    "mknote-notes": db,
+    "mknote-security": security,
+    "mknote-settings": settings,
+    "mknote-remote": remote
+};
+const remoteDatabases = ["mknote-notes", "mknote-security"];
+
 export default {
-    syncHandler: null,
+    syncHandler: {},
     async getNotes(decrypt = true) {
         const records = await db.allDocs({
             include_docs: true,
@@ -135,39 +144,81 @@ export default {
             });
         }
     },
-    async updateRemoteConnection(enabled, url, live) {
+    async updateRemoteConnections(enabled, url, live = true) {
         if (enabled) {
-            await this._cancelRemoteConnection();
-            const remoteDB = PouchDB(url); // http://localhost:5984/mknotes
-            this.syncHandler = db
-                .sync(remoteDB, {
-                    live: live,
-                    retry: true
-                })
-                .on("change", change => {
-                    console.log("CouchDB sync: change", change);
-                })
-                .on("paused", info => {
-                    console.log("CouchDB sync: paused", info);
-                })
-                .on("active", info => {
-                    console.log("CouchDB sync: active", info);
-                })
-                .on("error", error => {
-                    console.log("CouchDB sync: error", error);
+            if (await this._checkRemoteConnection(url)) {
+                await remoteDatabases.forEach(async remoteDBID => {
+                    await this._cancelRemoteConnection(remoteDBID);
+                    const remoteDB = PouchDB(url + "/" + remoteDBID);
+                    const syncHandler = this._initRemoteConnection(
+                        databases[remoteDBID],
+                        remoteDB,
+                        live
+                    );
+                    this.syncHandler[remoteDBID] = syncHandler;
                 });
+            } else {
+                throw new RemoteConnectionError("Error in remote connection");
+            }
         } else {
-            console.log(await this._cancelRemoteConnection());
+            await this._cancelAllRemoteConnection();
         }
         this.setRemote({ enabled: enabled, url: url, live: live });
     },
-    _cancelRemoteConnection() {
+    _initRemoteConnection(db, remoteDB, live) {
+        const syncHandler = db
+            .sync(remoteDB, {
+                live: live,
+                retry: true
+            })
+            .on("change", change => {
+                console.log("CouchDB sync: change", change);
+            })
+            .on("paused", info => {
+                console.log("CouchDB sync: paused", info);
+            })
+            .on("active", info => {
+                console.log("CouchDB sync: active", info);
+            })
+            .on("error", error => {
+                console.log("CouchDB sync: error", error);
+            });
+        return syncHandler;
+    },
+    async _checkRemoteConnection(url) {
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await this._checkRemoteSecret(url);
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
+    async _checkRemoteSecret(url) {
+        const remoteDB = PouchDB(url + "/" + "mknote-security");
+        const remoteSecurityData = await remoteDB.get("secret");
+        const localSecurityData = await security.get("secret");
+        return remoteSecurityData.secret === localSecurityData.secret;
+    },
+    async _cancelAllRemoteConnection() {
+        Object.keys(this.syncHandler).forEach(
+            async (syncHandlerID, syncHandler) => {
+                await this._cancelRemoteConnection(syncHandlerID);
+            }
+        );
+    },
+    _cancelRemoteConnection(syncHandlerID) {
         return new Promise((resolve, reject) => {
-            if (this.syncHandler !== null) {
-                this.syncHandler.cancel();
-                this.syncHandler.on("complete", info => {
+            if (this.syncHandler[syncHandlerID]) {
+                const syncHandler = this.syncHandler[syncHandlerID];
+                syncHandler.cancel();
+                syncHandler.on("complete", info => {
                     console.log("CouchDB sync: canceled", info);
-                    this.syncHandler = null;
+                    this.syncHandler[syncHandlerID] = null;
                     resolve("Cancelation complete");
                 });
             } else {

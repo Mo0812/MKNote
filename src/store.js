@@ -72,11 +72,7 @@ const actions = {
         try {
             const remote = await Api.getRemote();
             context.commit("REMOTE", remote);
-            try {
-                await Api.updateRemoteConnections(remote.enabled, remote.url);
-            } catch (error) {
-                console.log(error);
-            }
+            await Api.updateRemoteConnections(remote.enabled, remote.url);
         } catch (error) {
             console.log(error);
         }

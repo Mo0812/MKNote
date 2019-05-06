@@ -84,13 +84,21 @@
                 >Remote sync</b-checkbox>
             </SettingSection>
             <SettingSection id="profile-remote-url-group" label="Remote instance URL">
-                <b-input
-                    v-model="remote.url"
-                    name="profile-remote-url"
-                    placeholder="Remote URL"
-                    :disabled="!remote.enabled"
-                    @input="updateRemote"
-                />
+                <b-input-group>
+                    <b-input
+                        v-model="remote.url"
+                        name="profile-remote-url"
+                        placeholder="Remote URL"
+                        :disabled="!remote.enabled"
+                    />
+                    <b-input-group-append>
+                        <b-button
+                            variant="primary"
+                            :disabled="!remote.enabled"
+                            @click="updateRemote"
+                        >Connect</b-button>
+                    </b-input-group-append>
+                </b-input-group>
             </SettingSection>
             <SettingSection id="profile-remote-live-sync-group" label="Enable live sync">
                 <b-checkbox

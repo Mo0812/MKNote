@@ -145,19 +145,22 @@ export default {
     },
     async updateRemoteConnections(enabled, url, live = true) {
         if (enabled) {
-            await remoteDatabases.forEach(async remoteDBID => {
-                await this._cancelRemoteConnection(remoteDBID);
-                const remoteDB = PouchDB(url + "/" + remoteDBID);
-                const syncHandler = this._initRemoteConnection(
-                    databases[remoteDBID],
-                    remoteDB,
-                    live
-                );
-                this.syncHandler[remoteDBID] = syncHandler;
-            });
-            // http://localhost:5984/mknotes
+            if (await this._checkRemoteConnection(url)) {
+                await remoteDatabases.forEach(async remoteDBID => {
+                    await this._cancelRemoteConnection(remoteDBID);
+                    const remoteDB = PouchDB(url + "/" + remoteDBID);
+                    const syncHandler = this._initRemoteConnection(
+                        databases[remoteDBID],
+                        remoteDB,
+                        live
+                    );
+                    this.syncHandler[remoteDBID] = syncHandler;
+                });
+            } else {
+                console.log("error in remote connection");
+            }
         } else {
-            console.log(await this._cancelAllRemoteConnection());
+            await this._cancelAllRemoteConnection();
         }
         this.setRemote({ enabled: enabled, url: url, live: live });
     },
@@ -181,6 +184,25 @@ export default {
             });
         return syncHandler;
     },
+    async _checkRemoteConnection(url) {
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await this._checkRemoteSecret(url);
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
+    async _checkRemoteSecret(url) {
+        const remoteDB = PouchDB(url + "/" + "mknote-security");
+        const remoteSecurityData = await remoteDB.get("secret");
+        const localSecurityData = await security.get("secret");
+        return remoteSecurityData.secret === localSecurityData.secret;
+    },
     async _cancelAllRemoteConnection() {
         Object.keys(this.syncHandler).forEach(
             async (syncHandlerID, syncHandler) => {
@@ -190,7 +212,6 @@ export default {
     },
     _cancelRemoteConnection(syncHandlerID) {
         return new Promise((resolve, reject) => {
-            console.log(this.syncHandler[syncHandlerID]);
             if (this.syncHandler[syncHandlerID]) {
                 const syncHandler = this.syncHandler[syncHandlerID];
                 syncHandler.cancel();

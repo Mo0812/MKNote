@@ -210,7 +210,16 @@ export default {
             Object.assign(this.security, this.defaultSecurity);
         },
         async updateRemote() {
-            await this.$store.dispatch("remote", this.remote);
+            try {
+                await this.$store.dispatch("remote", this.remote);
+            } catch (error) {
+                this.remote.enabled = false;
+                this.$bvToast.toast(error.message, {
+                    title: "Remote connection",
+                    variant: "danger"
+                });
+                console.log(error);
+            }
         }
     }
 };

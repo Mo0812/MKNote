@@ -1,6 +1,7 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
 import CryptoUtil from "@/utils/CryptoUtil";
+import RemoteConnectionError from "@/error/RemoteConnectionError";
 
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
@@ -157,7 +158,7 @@ export default {
                     this.syncHandler[remoteDBID] = syncHandler;
                 });
             } else {
-                console.log("error in remote connection");
+                throw new RemoteConnectionError("Error in remote connection");
             }
         } else {
             await this._cancelAllRemoteConnection();

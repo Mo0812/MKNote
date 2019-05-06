@@ -1,3 +1,7 @@
+# [0.5.0] - 2019-05-07
+
+Correct remote DB handling
+
 # [0.4.0] - 2019-05-03
 
 Strict seperation between State, Api and IndexedDB + Remote ability

@@ -54,7 +54,9 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch("initNotes");
+        this.$store.dispatch("initNotes").catch(error => {
+            console.log(error);
+        });
     },
     methods: {
         addNote() {

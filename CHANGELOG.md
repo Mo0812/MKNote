@@ -1,3 +1,11 @@
+# [0.5.2] - 2019-05-07
+
+Add netlify and offline redirect for vue-router support
+
+# [0.5.1] - 2019-05-07
+
+Update PWA display mode and colors
+
 # [0.5.0] - 2019-05-07
 
 Correct remote DB handling

@@ -4,6 +4,8 @@ workbox.setConfig({
     debug: true
 });
 
+workbox.routing.registerNavigationRoute("/index.html");
+
 self.__precacheManifest = ["manifest.json"].concat(
     self.__precacheManifest || []
 );

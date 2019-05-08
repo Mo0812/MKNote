@@ -1,3 +1,9 @@
 .note-tree-toolbar {
     border-bottom: 1px solid $bgBorder;
+
+    .note-tree-search-group {
+        .note-tree-search-input {
+            border-radius: 0;
+        }
+    }
 }

@@ -1,3 +1,7 @@
+# [0.6.0] - 2019-05-08
+
+Add note filter option
+
 # [0.5.2] - 2019-05-07
 
 Add netlify and offline redirect for vue-router support

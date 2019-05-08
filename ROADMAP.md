@@ -1,7 +1,7 @@
 # Roadmap
 
 * [ ] Enable test cases
-* [ ] Enable secret remote propagation
+* [x] Enable secret remote propagation
 * [ ] Clear error and try/catch handling
 * [x] Syncing with couchDB server
 * [x] Better UI experience when deleting objects

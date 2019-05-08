@@ -22,95 +22,149 @@ const remoteDatabases = ["mknote-notes", "mknote-security"];
 export default {
     syncHandler: {},
     async getNotes(decrypt = true) {
-        const records = await db.allDocs({
-            include_docs: true,
-            attachments: true
-        });
-        const docs = [];
-        records.rows.forEach(row => {
-            if (decrypt) {
-                row.doc.title = CryptoUtil.decryptString(row.doc.title);
-                row.doc.value = CryptoUtil.decryptString(row.doc.value);
-            }
-            docs.push(row.doc);
-        });
-        return docs;
+        try {
+            const records = await db.allDocs({
+                include_docs: true,
+                attachments: true
+            });
+            const docs = [];
+            records.rows.forEach(row => {
+                if (decrypt) {
+                    row.doc.title = CryptoUtil.decryptString(row.doc.title);
+                    row.doc.value = CryptoUtil.decryptString(row.doc.value);
+                }
+                docs.push(row.doc);
+            });
+            return docs;
+        } catch (error) {
+            throw error;
+        }
     },
     getNote(id) {},
     async putAttachment(id, name, mime, data) {
-        const doc = await db.get(id);
-        var blob = new Blob([data], {
-            type: mime
-        });
-        const response = await db.putAttachment(id, name, doc._rev, blob, mime);
-        return response;
+        try {
+            const doc = await db.get(id);
+            var blob = new Blob([data], {
+                type: mime
+            });
+            const response = await db.putAttachment(
+                id,
+                name,
+                doc._rev,
+                blob,
+                mime
+            );
+            return response;
+        } catch (error) {
+            throw error;
+        }
     },
     async getAttachment(id, name) {
-        const blob = await db.getAttachment(id, name);
-        return blob;
+        try {
+            const blob = await db.getAttachment(id, name);
+            return blob;
+        } catch (error) {
+            throw error;
+        }
     },
     async updateNote(payload) {
-        const title = CryptoUtil.encryptString(payload.title);
-        const value = CryptoUtil.encryptString(payload.value);
-        const doc = await db.get(payload._id);
-        doc.title = title;
-        doc.value = value;
-        await db.put(doc);
+        try {
+            const title = CryptoUtil.encryptString(payload.title);
+            const value = CryptoUtil.encryptString(payload.value);
+            const doc = await db.get(payload._id);
+            doc.title = title;
+            doc.value = value;
+            await db.put(doc);
+        } catch (error) {
+            throw error;
+        }
     },
     async addNote() {
-        const newId = shortid.generate();
-        const title = CryptoUtil.encryptString("");
-        const value = CryptoUtil.encryptString("");
-        const newNode = {
-            _id: newId,
-            title: title,
-            value: value,
-            created: Date.now()
-        };
+        try {
+            const newId = shortid.generate();
+            const title = CryptoUtil.encryptString("");
+            const value = CryptoUtil.encryptString("");
+            const newNode = {
+                _id: newId,
+                title: title,
+                value: value,
+                created: Date.now()
+            };
 
-        const responseNode = await db.put(newNode);
-        newNode._rev = responseNode._rev;
-        newNode.title = "";
-        newNode.value = "";
-        return newNode;
+            const responseNode = await db.put(newNode);
+            newNode._rev = responseNode._rev;
+            newNode.title = "";
+            newNode.value = "";
+            return newNode;
+        } catch (error) {
+            throw error;
+        }
     },
     async removeNote(id) {
-        const doc = await db.get(id);
-        await db.remove(doc);
+        try {
+            const doc = await db.get(id);
+            await db.remove(doc);
+        } catch (error) {
+            throw error;
+        }
     },
     async export() {
-        const docs = await this.getNotes(false);
-        const rawDocs = JSON.stringify(docs);
-        var blob = new Blob([rawDocs], { type: "application/json" });
-        return blob;
+        try {
+            const docs = await this.getNotes(false);
+            const rawDocs = JSON.stringify(docs);
+            var blob = new Blob([rawDocs], { type: "application/json" });
+            return blob;
+        } catch (error) {
+            throw error;
+        }
     },
     async initSecret(secret) {
-        const hash = CryptoUtil.hashString(secret);
-        await security.put({
-            _id: "secret",
-            secret: hash
-        });
+        try {
+            const hash = CryptoUtil.hashString(secret);
+            await security.put({
+                _id: "secret",
+                secret: hash
+            });
+        } catch (error) {
+            throw error;
+        }
     },
     async updateSecret(secret) {
-        var storedSecret = await security.get("secret");
-        storedSecret.secret = CryptoUtil.hashString(secret);
-        await security.put(storedSecret);
+        try {
+            var storedSecret = await security.get("secret");
+            storedSecret.secret = CryptoUtil.hashString(secret);
+            await security.put(storedSecret);
+        } catch (error) {
+            throw error;
+        }
     },
     async getSecret() {
-        return await security.get("secret");
+        try {
+            return await security.get("secret");
+        } catch (error) {
+            throw error;
+        }
     },
     async renewEncryption(oldSecret) {
-        const notes = await this.getNotes(false);
-        const scope = this;
-        await notes.forEach(async note => {
-            note.title = CryptoUtil.decryptString(note.title, oldSecret);
-            note.value = CryptoUtil.decryptString(note.value, oldSecret);
-            await scope.updateNote(note);
-        });
+        try {
+            const notes = await this.getNotes(false);
+            const scope = this;
+            await notes.forEach(async note => {
+                note.title = CryptoUtil.decryptString(note.title, oldSecret);
+                note.value = CryptoUtil.decryptString(note.value, oldSecret);
+                await scope.updateNote(note);
+            });
+        } catch (error) {
+            throw error;
+        }
     },
     async getSettings() {
-        const currentSettings = await settings.get("settings");
-        return currentSettings.settings;
+        try {
+            const currentSettings = await settings.get("settings");
+            return currentSettings.settings;
+        } catch (error) {
+            throw error;
+        }
     },
     async setSettings(newSettings) {
         try {
@@ -194,15 +248,18 @@ export default {
                 return false;
             }
         } catch (error) {
-            console.log(error);
             return false;
         }
     },
     async _checkRemoteSecret(url) {
-        const remoteDB = PouchDB(url + "/" + "mknote-security");
-        const remoteSecurityData = await remoteDB.get("secret");
-        const localSecurityData = await security.get("secret");
-        return remoteSecurityData.secret === localSecurityData.secret;
+        try {
+            const remoteDB = PouchDB(url + "/" + "mknote-security");
+            const remoteSecurityData = await remoteDB.get("secret");
+            const localSecurityData = await security.get("secret");
+            return remoteSecurityData.secret === localSecurityData.secret;
+        } catch (error) {
+            return error.status === 404;
+        }
     },
     async _cancelAllRemoteConnection() {
         Object.keys(this.syncHandler).forEach(

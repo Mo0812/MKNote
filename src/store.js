@@ -4,6 +4,7 @@ import VuexPersist from "vuex-persist";
 import i18n from "@/i18n";
 import Api from "@/api/Api";
 import CryptoUtil from "@/utils/CryptoUtil";
+import AuthentificationError from "@/error/AuthentificationError";
 
 Vue.use(Vuex);
 
@@ -80,29 +81,45 @@ const actions = {
             throw error;
         }
     },
-    initNotes: (context, payload) => {
-        Api.getNotes().then(docs => {
+    initNotes: async (context, payload) => {
+        try {
+            const docs = await Api.getNotes();
             context.commit("NOTE_INIT", docs);
-        });
+        } catch (error) {
+            throw error;
+        }
     },
-    updateNote: (context, payload) => {
-        Api.updateNote(payload).then(response => {
+    updateNote: async (context, payload) => {
+        try {
+            await Api.updateNote(payload);
             context.commit("NOTE_UPDATE", payload);
-        });
+        } catch (error) {
+            throw error;
+        }
     },
-    addNote: (context, payload) => {
-        Api.addNote(payload).then(newNode => {
+    addNote: async (context, payload) => {
+        try {
+            const newNode = await Api.addNote(payload);
             context.commit("NOTE_ADD", newNode);
-        });
+        } catch (error) {
+            throw error;
+        }
     },
-    removeNote: (context, payload) => {
-        Api.removeNote(payload).then(response => {
+    removeNote: async (context, payload) => {
+        try {
+            await Api.removeNote(payload);
             context.commit("NOTE_REMOVE", payload);
-        });
+        } catch (error) {
+            throw error;
+        }
     },
     settings: async (context, payload) => {
-        await Api.setSettings(payload);
-        context.commit("SETTINGS", payload);
+        try {
+            await Api.setSettings(payload);
+            context.commit("SETTINGS", payload);
+        } catch (error) {
+            throw error;
+        }
     },
     remote: async (context, payload) => {
         try {
@@ -123,9 +140,13 @@ const actions = {
         }
     },
     renewAuthentification: async (context, payload) => {
-        await Api.updateSecret(payload.newSecret);
-        context.commit("AUTHENTIFICATE", payload.newSecret);
-        await Api.renewEncryption(payload.oldSecret);
+        try {
+            await Api.updateSecret(payload.newSecret);
+            context.commit("AUTHENTIFICATE", payload.newSecret);
+            await Api.renewEncryption(payload.oldSecret);
+        } catch (error) {
+            throw error;
+        }
     },
     authentificate: async (context, payload) => {
         try {
@@ -137,7 +158,7 @@ const actions = {
                 return false;
             }
         } catch {
-            throw new Error("Need init");
+            throw new AuthentificationError("Authentification data not found");
         }
     },
     lock: (context, payload) => {

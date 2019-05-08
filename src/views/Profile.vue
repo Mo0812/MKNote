@@ -84,7 +84,7 @@
                 >Remote sync</b-checkbox>
             </SettingSection>
             <SettingSection id="profile-remote-url-group" label="Remote instance URL">
-                <b-input-group>
+                <b-input-group class="mb-3">
                     <b-input
                         v-model="remote.url"
                         name="profile-remote-url"
@@ -99,15 +99,19 @@
                         >Connect</b-button>
                     </b-input-group-append>
                 </b-input-group>
-            </SettingSection>
-            <SettingSection id="profile-remote-live-sync-group" label="Enable live sync">
-                <b-checkbox
-                    v-model="remote.liveSync"
-                    name="profile-remote-live-sync"
-                    :disabled="!remote.enabled"
-                    switch
-                    @input="updateRemote"
-                >Live sync</b-checkbox>
+                <b-input
+                    class="my-1"
+                    name="profile-remote-user"
+                    placeholder="Remote username"
+                    :disabled="true"
+                />
+                <b-input
+                    class="my-1"
+                    name="profile-remote-pass"
+                    type="password"
+                    placeholder="Remote password"
+                    :disabled="true"
+                />
             </SettingSection>
         </div>
     </section>
@@ -115,6 +119,7 @@
 
 <script>
 import SettingSection from "@/components/SettingSection/SettingSection";
+import ToastUtil from "@/utils/ToastUtil";
 
 export default {
     name: "profile",
@@ -143,8 +148,7 @@ export default {
             },
             remote: {
                 enabled: false,
-                url: null,
-                liveSync: true
+                url: null
             }
         };
     },
@@ -214,11 +218,13 @@ export default {
                 await this.$store.dispatch("remote", this.remote);
             } catch (error) {
                 this.remote.enabled = false;
-                this.$bvToast.toast(error.message, {
-                    title: "Remote connection",
-                    variant: "danger"
-                });
-                console.log(error);
+                ToastUtil.makeToast(
+                    this,
+                    "Remote connection",
+                    error.message,
+                    "danger",
+                    7500
+                );
             }
         }
     }

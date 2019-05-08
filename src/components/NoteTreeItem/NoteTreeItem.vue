@@ -2,9 +2,9 @@
     <div>
         <header class="d-flex w-100 justify-content-between">
             <h5>{{title}}</h5>
-            <small>{{extra}}</small>
+            <small>{{time}}</small>
         </header>
-        <p class="excerpt mb-1">{{excerpt}}</p>
+        <!--<p class="excerpt mb-1">{{excerpt}}</p>-->
         <footer>
             <b-button variant="danger" size="sm" @click="removeAction($event)">
                 <font-awesome-icon v-if="!remove.confirm" icon="trash"/>
@@ -33,6 +33,11 @@ export default {
                 confirm: false
             }
         };
+    },
+    computed: {
+        time() {
+            return this.$moment(this.extra).fromNow();
+        }
     },
     methods: {
         removeAction(evt) {

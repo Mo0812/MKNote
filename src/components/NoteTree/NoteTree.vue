@@ -10,10 +10,15 @@
             :actionContent="action.actionContent"
             @action="alertAction"
         />
-        <NoteTreeToolbar @addNote="addNote" @changeNoteView="changeNoteView" @share="share"/>
+        <NoteTreeToolbar
+            @addNote="addNote"
+            @changeNoteView="changeNoteView"
+            @share="share"
+            @filter="filterAction"
+        />
         <b-list-group class="note-tree-list">
             <b-list-group-item
-                v-for="note in notes"
+                v-for="note in localNotes"
                 class="note-tree-item flex-column align-items-start"
                 :key="note._id"
                 :active="openId === note._id"
@@ -37,6 +42,7 @@ import ActionAlert from "@/components/ActionAlert/ActionAlert";
 import NoteTreeToolbar from "@/components/NoteTreeToolbar/NoteTreeToolbar";
 import NoteTreeItem from "@/components/NoteTreeItem/NoteTreeItem";
 import "./NoteTree.scss";
+import { filter } from "minimatch";
 
 export default {
     name: "NoteTree",
@@ -57,6 +63,9 @@ export default {
                 result: null,
                 actionContent: "",
                 actionShow: false
+            },
+            filter: {
+                value: ""
             }
         };
     },
@@ -71,6 +80,18 @@ export default {
                 actionContent: "",
                 actionShow: false
             };
+        },
+        localNotes() {
+            const filteredNotes = this.notes.filter(note => {
+                return (
+                    this.filter.value === null ||
+                    this.filter.value === "" ||
+                    note.title
+                        .toLowerCase()
+                        .includes(this.filter.value.toLowerCase())
+                );
+            });
+            return filteredNotes;
         }
     },
     methods: {
@@ -134,10 +155,8 @@ export default {
                     break;
             }
         },
-        formatDate(date) {
-            return this.$moment(date)
-                .startOf("minute")
-                .fromNow();
+        filterAction(value) {
+            this.filter.value = value;
         }
     }
 };

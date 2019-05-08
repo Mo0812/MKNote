@@ -1,40 +1,50 @@
 <template>
-    <b-button-toolbar
-        class="note-tree-toolbar pt-2 pb-2 mr-3"
-        key-nav
-        aria-label="Toolbar for managing notes"
-        :justify="true"
-    >
-        <b-button-group size="sm">
-            <b-button aria-label="Add new Note" @click="add">
-                <font-awesome-icon icon="plus"/>
-            </b-button>
-        </b-button-group>
+    <div class="note-tree-toolbar">
+        <b-button-toolbar
+            class="note-tree-button-bar px-3 my-2"
+            key-nav
+            aria-label="Toolbar for managing notes"
+            :justify="true"
+        >
+            <b-button-group size="sm">
+                <b-button aria-label="Add new Note" @click="add">
+                    <font-awesome-icon icon="plus"/>
+                </b-button>
+            </b-button-group>
 
-        <b-button-group size="sm">
-            <b-button
-                v-for="option in view.options"
-                :key="option.value"
-                :aria-label="option.label"
-                :active="option.value === view.selected"
-                @click="changeNoteView(option.value)"
-            >
-                <font-awesome-icon :icon="option.icon"/>
-            </b-button>
-        </b-button-group>
+            <b-button-group size="sm">
+                <b-button
+                    v-for="option in view.options"
+                    :key="option.value"
+                    :aria-label="option.label"
+                    :active="option.value === view.selected"
+                    @click="changeNoteView(option.value)"
+                >
+                    <font-awesome-icon :icon="option.icon"/>
+                </b-button>
+            </b-button-group>
 
-        <b-button-group size="sm">
-            <b-button
-                v-for="option in share.options"
-                :key="option.value"
-                :aria-label="option.label"
-                :disabled="option.value === 'import'"
-                @click="shareAction(option.value)"
-            >
-                <font-awesome-icon :icon="option.icon"/>
-            </b-button>
-        </b-button-group>
-    </b-button-toolbar>
+            <b-button-group size="sm">
+                <b-button
+                    v-for="option in share.options"
+                    :key="option.value"
+                    :aria-label="option.label"
+                    :disabled="option.value === 'import'"
+                    @click="shareAction(option.value)"
+                >
+                    <font-awesome-icon :icon="option.icon"/>
+                </b-button>
+            </b-button-group>
+        </b-button-toolbar>
+        <b-input-group class="note-tree-filter-group">
+            <b-input
+                class="note-tree-filter-input"
+                placeholder="Filter notes"
+                v-model="filter.value"
+                @input="inputFilterValue"
+            />
+        </b-input-group>
+    </div>
 </template>
 
 <script>
@@ -73,6 +83,9 @@ export default {
                         value: "export"
                     }
                 ]
+            },
+            filter: {
+                value: ""
             }
         };
     },
@@ -85,6 +98,9 @@ export default {
         },
         shareAction(action) {
             this.$emit("share", action);
+        },
+        inputFilterValue(action) {
+            this.$emit("filter", this.filter.value);
         }
     }
 };

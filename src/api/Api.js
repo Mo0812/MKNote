@@ -40,7 +40,6 @@ export default {
             throw error;
         }
     },
-    getNote(id) {},
     async putAttachment(id, name, mime, data) {
         try {
             const doc = await db.get(id);
@@ -262,14 +261,12 @@ export default {
         }
     },
     async _cancelAllRemoteConnection() {
-        Object.keys(this.syncHandler).forEach(
-            async (syncHandlerID, syncHandler) => {
-                await this._cancelRemoteConnection(syncHandlerID);
-            }
-        );
+        Object.keys(this.syncHandler).forEach(async syncHandlerID => {
+            await this._cancelRemoteConnection(syncHandlerID);
+        });
     },
     _cancelRemoteConnection(syncHandlerID) {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             if (this.syncHandler[syncHandlerID]) {
                 const syncHandler = this.syncHandler[syncHandlerID];
                 syncHandler.cancel();

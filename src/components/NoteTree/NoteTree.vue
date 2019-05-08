@@ -42,7 +42,6 @@ import ActionAlert from "@/components/ActionAlert/ActionAlert";
 import NoteTreeToolbar from "@/components/NoteTreeToolbar/NoteTreeToolbar";
 import NoteTreeItem from "@/components/NoteTreeItem/NoteTreeItem";
 import "./NoteTree.scss";
-import { filter } from "minimatch";
 
 export default {
     name: "NoteTree",

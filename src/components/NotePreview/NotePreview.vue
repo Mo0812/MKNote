@@ -34,7 +34,7 @@ export default {
     },
     watch: {
         note: {
-            handler(newVal, oldVal) {
+            handler() {
                 this.preProcessMarkdown();
             },
             deep: true

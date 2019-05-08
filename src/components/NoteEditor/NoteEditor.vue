@@ -115,12 +115,7 @@ export default {
                             mime
                         );
                         this.busy.progress = 50;
-                        const result = await Api.putAttachment(
-                            id,
-                            name,
-                            mime,
-                            processedBlob
-                        );
+                        await Api.putAttachment(id, name, mime, processedBlob);
                         this.busy.progress = 80;
                         const content = "![" + name + "](note:" + name + ")";
                         this.insertOnCursor(content, editor);

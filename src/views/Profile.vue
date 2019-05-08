@@ -182,15 +182,6 @@ export default {
         getRemote() {
             this.remote = this.$store.getters.getRemote;
         },
-        async validateSecret() {
-            this.security.valid = null;
-            const response = await this.$store.dispatch(
-                "authentificate",
-                this.security.currentSecret
-            );
-            this.security.valid = response === true ? null : false;
-            this.security.renew = response;
-        },
         async renewSecret() {
             this.security.valid = null;
             if (this.security.newSecret === this.security.newSecretConfirm) {

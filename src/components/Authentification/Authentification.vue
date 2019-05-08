@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import Api from "@/api/Api";
 import "./Authentification.scss";
 
 export default {

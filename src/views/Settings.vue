@@ -77,7 +77,7 @@ export default {
         getSettings() {
             this.settings = this.$store.getters.getSettings;
         },
-        onChange(evt) {
+        onChange() {
             this.$store.dispatch("settings", this.settings);
         }
     }

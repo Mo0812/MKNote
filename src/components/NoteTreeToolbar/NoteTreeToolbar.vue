@@ -99,7 +99,7 @@ export default {
         shareAction(action) {
             this.$emit("share", action);
         },
-        inputFilterValue(action) {
+        inputFilterValue() {
             this.$emit("filter", this.filter.value);
         }
     }

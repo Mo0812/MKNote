@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VuexPersist from "vuex-persist";
+// import VuexPersist from "vuex-persist";
 import i18n from "@/i18n";
 import Api from "@/api/Api";
 import CryptoUtil from "@/utils/CryptoUtil";
@@ -62,13 +62,13 @@ const mutations = {
         const security = state.security;
         security.secret = payload;
     },
-    LOCK: (state, payload) => {
+    LOCK: state => {
         const security = state.security;
         security.secret = null;
     }
 };
 const actions = {
-    initStore: async (context, payload) => {
+    initStore: async context => {
         console.log("init");
         try {
             const remote = await Api.getRemote();
@@ -81,7 +81,7 @@ const actions = {
             throw error;
         }
     },
-    initNotes: async (context, payload) => {
+    initNotes: async context => {
         try {
             const docs = await Api.getNotes();
             context.commit("NOTE_INIT", docs);
@@ -161,15 +161,15 @@ const actions = {
             throw new AuthentificationError("Authentification data not found");
         }
     },
-    lock: (context, payload) => {
+    lock: context => {
         context.commit("LOCK");
     }
 };
 
-const vuexPersist = new VuexPersist({
+/*const vuexPersist = new VuexPersist({
     key: "mk-notes",
     storage: localStorage
-});
+});*/
 
 export default new Vuex.Store({
     state: state,

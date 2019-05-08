@@ -1,6 +1,6 @@
 <template>
     <b-row class="h-100">
-        <b-col cols="4" xl="2" class="h-100 px-0">
+        <b-col cols="4" xl="3" class="h-100 px-0">
             <NoteTree
                 :notes="notes"
                 @addNote="addNote"
@@ -10,20 +10,20 @@
             />
         </b-col>
         <template v-if="viewMode === 'both'">
-            <b-col cols="4" md="8" xl="5" class="px-0">
+            <b-col cols="8" xl="5" class="px-0">
                 <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
-            <b-col cols="4" xl="5" class="d-md-none">
+            <b-col cols="4" class="d-none d-xl-block">
                 <NotePreview :note="note"/>
             </b-col>
         </template>
         <template v-else-if="viewMode === 'md'">
-            <b-col cols="8" xl="10" class="px-0">
+            <b-col cols="8" xl="9" class="px-0">
                 <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
         </template>
         <template v-else>
-            <b-col cols="8" xl="10">
+            <b-col cols="8" xl="9">
                 <NotePreview :note="note"/>
             </b-col>
         </template>

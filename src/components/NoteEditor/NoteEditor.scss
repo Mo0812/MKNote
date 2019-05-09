@@ -1,11 +1,24 @@
 .note-editor {
-    .note-title {
-        &.note-title-input {
-            border-radius: 0 !important;
-        }
-    }
+    height: 100%;
 
-    .CodeMirror {
-        height: calc(100% - #{$noteViewTitleHeight});
+    .note-editor-container {
+        height: 100%;
+
+        .note-title {
+            &.note-title-input {
+                @include inlineInput;
+
+                border-left: none;
+
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
+        }
+
+        .CodeMirror {
+            height: calc(100% - #{$noteViewTitleHeight});
+            overflow: scroll;
+            overflow-x: hidden;
+        }
     }
 }

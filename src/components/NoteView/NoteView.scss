@@ -1,0 +1,10 @@
+.note-view {
+    height: calc(100vh - 56px);
+
+    .note-tree-col,
+    .note-editor-col,
+    .note-preview-col {
+        height: 100%;
+        // overflow: scroll;
+    }
+}

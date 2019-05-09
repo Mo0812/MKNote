@@ -11,6 +11,10 @@
 
     & > main {
         margin-top: 56px;
+
+        & > .container-fluid {
+            height: 100%;
+        }
     }
 }
 

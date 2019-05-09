@@ -1,3 +1,11 @@
+# [0.7.0] - 2019-05-09
+
+Styling of note view with similar borders and spacing
+
+# [0.6.1] - 2019-05-08
+
+Minor changes in styling
+
 # [0.6.0] - 2019-05-08
 
 Add note filter option

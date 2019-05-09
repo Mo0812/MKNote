@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import "./Navbar.scss";
+
 export default {
     name: "Navbar",
     computed: {

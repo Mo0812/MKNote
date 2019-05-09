@@ -27,3 +27,18 @@
         transform: translate3d(4px, 0, 0);
     }
 }
+
+@mixin inlineInput {
+    border-radius: 0;
+
+    &:focus {
+        border-color: #ced4da;
+        box-shadow: none !important;
+    }
+}
+
+@mixin inputTheme {
+    background-color: $backgroundColorDark;
+    color: $foregroundColor;
+    border-color: $backgroundColorDarker;
+}

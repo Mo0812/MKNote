@@ -7,5 +7,6 @@
 
     .CodeMirror {
         height: calc(100% - #{$noteViewTitleHeight});
+        overflow: scroll;
     }
 }

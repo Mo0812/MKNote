@@ -1,6 +1,6 @@
 <template>
-    <b-row class="h-100">
-        <b-col cols="4" xl="3" class="h-100 px-0">
+    <b-row class="note-view">
+        <b-col cols="4" xl="3" class="note-tree-col px-0">
             <NoteTree
                 :notes="notes"
                 @addNote="addNote"
@@ -10,10 +10,10 @@
             />
         </b-col>
         <template v-if="viewMode === 'both'">
-            <b-col cols="8" xl="5" class="px-0">
+            <b-col cols="8" xl="5" class="note-editor-col px-0">
                 <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
-            <b-col cols="4" class="d-none d-xl-block">
+            <b-col cols="4" class="note-preview-col d-none d-xl-block">
                 <NotePreview :note="note"/>
             </b-col>
         </template>
@@ -34,6 +34,8 @@
 import NoteEditor from "@/components/NoteEditor/NoteEditor";
 import NotePreview from "@/components/NotePreview/NotePreview";
 import NoteTree from "@/components/NoteTree/NoteTree";
+
+import "./NoteView.scss";
 
 export default {
     name: "NoteView",

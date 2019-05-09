@@ -1,10 +1,29 @@
 .note-preview {
-    padding-top: $noteViewTitleHeight;
     height: 100%;
-    overflow: scroll;
-    overflow-x: hidden;
 
-    img {
-        max-width: 100%;
+    .note-preview-container {
+        height: 100%;
+
+        .note-title {
+            height: $noteViewTitleHeight;
+            border-bottom: 1px solid $bgBorder;
+            padding: 0 1rem;
+
+            h5 {
+                margin: 0;
+            }
+        }
+
+        .note-content {
+            height: calc(100% - #{$noteViewTitleHeight});
+            overflow: scroll;
+            overflow-x: hidden;
+            padding: 0 1rem;
+            padding-top: calc(2 / 3 * 1rem);
+
+            img {
+                max-width: 100%;
+            }
+        }
     }
 }

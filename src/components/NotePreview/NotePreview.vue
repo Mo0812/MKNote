@@ -1,5 +1,12 @@
 <template>
-    <section class="note-preview" v-html="value"></section>
+    <section class="note-preview">
+        <div class="note-preview-container">
+            <header v-if="note" class="note-title d-flex">
+                <h5 class="justify-content-center align-self-center">{{note.title}}</h5>
+            </header>
+            <div class="note-content" v-html="value"/>
+        </div>
+    </section>
 </template>
 
 <script>

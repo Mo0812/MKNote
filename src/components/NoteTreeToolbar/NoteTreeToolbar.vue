@@ -1,7 +1,7 @@
 <template>
     <div class="note-tree-toolbar">
         <b-button-toolbar
-            class="note-tree-button-bar px-3 my-2"
+            class="note-tree-button-bar"
             key-nav
             aria-label="Toolbar for managing notes"
             :justify="true"

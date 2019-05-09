@@ -13,17 +13,17 @@
             <b-col cols="8" xl="5" class="note-editor-col px-0">
                 <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
-            <b-col cols="4" class="note-preview-col d-none d-xl-block">
+            <b-col cols="4" class="note-preview-col px-0 d-none d-xl-block">
                 <NotePreview :note="note"/>
             </b-col>
         </template>
         <template v-else-if="viewMode === 'md'">
-            <b-col cols="8" xl="9" class="px-0">
+            <b-col cols="8" xl="9" class="note-editor-col px-0">
                 <NoteEditor :note="note" @updateNote="updateNote"/>
             </b-col>
         </template>
         <template v-else>
-            <b-col cols="8" xl="9">
+            <b-col cols="8" xl="9" class="note-preview-col px-0">
                 <NotePreview :note="note"/>
             </b-col>
         </template>

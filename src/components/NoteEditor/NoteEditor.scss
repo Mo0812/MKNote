@@ -6,7 +6,7 @@
 
         .note-title {
             &.note-title-input {
-                border-radius: 0 !important;
+                @include inlineInput;
             }
         }
 

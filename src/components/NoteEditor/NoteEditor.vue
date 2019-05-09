@@ -24,7 +24,7 @@
             ></b-form-input>
             <textarea id="md-textarea" ref="mdtextarea"/>
         </div>
-        <div v-else class="h-100">
+        <div v-else class="note-editor-container">
             <b-row class="h-100 justify-content-center align-items-center text-center">
                 <b-col cols="12">
                     <h3>{{$t("notes.editor.emptyMessage")}}</h3>
@@ -72,7 +72,7 @@ export default {
                         this.refreshEditor();
                     }
                 } else {
-                    this.editor = null;
+                    this.removeEditor();
                 }
             },
             deep: true
@@ -131,6 +131,10 @@ export default {
                 this.editor.setValue(this.note.value);
                 this.editor.refresh();
             }
+        },
+        removeEditor() {
+            this.editor.toTextArea();
+            this.editor = null;
         },
         update() {
             const note = {

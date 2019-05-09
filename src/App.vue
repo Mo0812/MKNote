@@ -5,7 +5,7 @@
         </header>
         <template>
             <main class="flex-fill">
-                <b-container class="h-100" fluid>
+                <b-container fluid>
                     <router-view/>
                 </b-container>
             </main>

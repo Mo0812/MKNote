@@ -1,5 +1,5 @@
 <template>
-    <section class="note-preview h-100" v-html="value"></section>
+    <section class="note-preview" v-html="value"></section>
 </template>
 
 <script>

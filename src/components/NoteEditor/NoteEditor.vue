@@ -1,6 +1,6 @@
 <template>
-    <section class="note-editor h-100">
-        <div v-if="note" class="note-editor-container h-100">
+    <section class="note-editor">
+        <div v-if="note" class="note-editor-container">
             <b-alert variant="primary" :show="busy.uploading">
                 <h5 class="alert-heading">Uploading Image</h5>
                 <hr>

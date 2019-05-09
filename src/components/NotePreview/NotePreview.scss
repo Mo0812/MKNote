@@ -6,11 +6,14 @@
 
         .note-title {
             height: $noteViewTitleHeight;
+            border-top: 1px solid $bgBorder;
             border-bottom: 1px solid $bgBorder;
             padding: 0 1rem;
 
             h5 {
                 margin: 0;
+                font-size: 1.25rem;
+                font-weight: 500;
             }
         }
 

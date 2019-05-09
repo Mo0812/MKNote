@@ -7,6 +7,11 @@
         .note-title {
             &.note-title-input {
                 @include inlineInput;
+
+                border-left: none;
+
+                font-size: 1.25rem;
+                font-weight: 500;
             }
         }
 

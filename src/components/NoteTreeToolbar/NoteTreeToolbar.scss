@@ -1,5 +1,8 @@
 .note-tree-toolbar {
-    border-bottom: 2px solid $bgBorder;
+    background-color: $bgLight;
+
+    border-top: 1px solid $bgBorder;
+    border-bottom: 1px solid $bgBorder;
 
     padding: calc(2 / 3 * 1rem) 1rem;
 

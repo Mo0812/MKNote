@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import VuexPersist from "vuex-persist";
+import VuexPersist from "vuex-persist";
 import i18n from "@/i18n";
 import Api from "@/api/Api";
 import CryptoUtil from "@/utils/CryptoUtil";
@@ -173,15 +173,16 @@ const actions = {
     }
 };
 
-/*const vuexPersist = new VuexPersist({
-    key: "mk-notes",
-    storage: localStorage
-});*/
+const vuexPersist = new VuexPersist({
+    key: "mk-note",
+    storage: localStorage,
+    reducer: state => ({ security: state.security })
+});
 
 export default new Vuex.Store({
     state: state,
     getters: getters,
     mutations: mutations,
-    actions: actions
-    // plugins: [vuexPersist.plugin]
+    actions: actions,
+    plugins: [vuexPersist.plugin]
 });

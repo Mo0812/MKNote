@@ -11,7 +11,13 @@
                 <b-nav-item href="#" to="/about">{{$t("navbar.about")}}</b-nav-item>
             </b-navbar-nav>
 
-            <b-navbar-nav class="ml-auto" v-if="unlocked">
+            <b-navbar-nav class="command-palette" ref="commandPalette">
+                <b-input-group>
+                    <b-input/>
+                </b-input-group>
+            </b-navbar-nav>
+
+            <b-navbar-nav class="ml-3" v-if="unlocked">
                 <b-nav-item-dropdown right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user-circle" class="mr-1"/>

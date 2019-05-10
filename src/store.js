@@ -21,6 +21,9 @@ const state = {
         enabled: false,
         url: null,
         liveSync: true
+    },
+    commandPalette: {
+        focus: false
     }
 };
 // const defaultState = state;
@@ -28,7 +31,8 @@ const getters = {
     getNotes: state => state.notes,
     getSettings: state => state.settings,
     getSecurity: state => state.security,
-    getRemote: state => state.remote
+    getRemote: state => state.remote,
+    getCommandPalette: state => state.commandPalette
 };
 const mutations = {
     NOTE_INIT: (state, payload) => {

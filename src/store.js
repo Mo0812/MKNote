@@ -78,7 +78,14 @@ const actions = {
             const settings = await Api.getSettings();
             context.commit("SETTINGS", settings);
         } catch (error) {
-            throw error;
+            console.log("no remote found");
+        }
+
+        try {
+            const settings = await Api.getSettings();
+            context.commit("SETTINGS", settings);
+        } catch (error) {
+            console.log("no settings found");
         }
     },
     initNotes: async context => {

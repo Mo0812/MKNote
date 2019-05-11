@@ -13,7 +13,8 @@
         <NoteTreeToolbar
             @addNote="addNote"
             @changeNoteView="changeNoteView"
-            @share="share"
+            @importAll="importAll"
+            @exportAll="exportAll"
             @filter="filterAction"
         />
         <b-list-group class="note-tree-list">
@@ -29,6 +30,7 @@
                     :extra="note.created"
                     :excerpt="note.value"
                     @remove="removeNote(note._id, $event)"
+                    @exportNote="exportNote(note._id)"
                 ></NoteTreeItem>
             </b-list-group-item>
         </b-list-group>
@@ -109,41 +111,61 @@ export default {
             }
             this.$emit("removeNote", id);
         },
+        _changeActionSheet(options) {
+            Object.assign(this.action, options);
+        },
+        async exportNote(id) {
+            this._changeActionSheet({
+                type: "exportNote",
+                show: true,
+                title: "Exporting...",
+                content: "Your note is getting prepared",
+                busy: true
+            });
+            const blob = await Api.exportNote(id);
+            this._changeActionSheet({
+                content: "You note is ready to download",
+                busy: false,
+                actionShow: true,
+                actionContent: "Download note",
+                result: blob
+            });
+        },
+        async exportAll() {
+            this._changeActionSheet({
+                type: "export",
+                show: true,
+                title: "Exporting...",
+                content: "Your notes getting prepared",
+                busy: true
+            });
+            const blob = await Api.exportAll();
+            this._changeActionSheet({
+                content: "Your notes are ready to download",
+                busy: false,
+                actionShow: true,
+                actionContent: "Download notes",
+                result: blob
+            });
+        },
+        async importAll() {
+            this._changeActionSheet({
+                type: "import",
+                show: true,
+                title: "Import...",
+                content: "Please choose a file to import",
+                busy: false,
+                result: null,
+                actionShow: true,
+                actionContent: "Choose import file"
+            });
+        },
         changeNoteView(viewMode) {
             this.$emit("changeNoteView", viewMode);
         },
-        async share(action) {
-            switch (action) {
-                case "export":
-                    this.action = {
-                        type: action,
-                        show: true,
-                        title: "Exporting...",
-                        content: "Your files getting prepared",
-                        busy: true
-                    };
-                    const blob = await Api.export();
-                    this.action.content = "Your files are ready to download";
-                    this.action.busy = false;
-                    this.action.actionShow = true;
-                    this.action.actionContent = "Download file";
-                    this.action.result = blob;
-                    break;
-                case "import":
-                    this.action = {
-                        type: action,
-                        show: true,
-                        title: "Import...",
-                        content: "Please choose a file to import",
-                        busy: false,
-                        result: null,
-                        actionShow: true,
-                        actionContent: "Choose import file"
-                    };
-            }
-        },
         alertAction() {
             switch (this.action.type) {
+                case "exportNote":
                 case "export":
                     FileUtil.downloadBlob(this.action.result);
                     this.action.show = false;

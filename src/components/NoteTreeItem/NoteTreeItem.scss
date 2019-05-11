@@ -1,0 +1,11 @@
+.note-tree-item-inner {
+    .button-bar {
+        .btn {
+            margin-right: $spacing1;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+    }
+}

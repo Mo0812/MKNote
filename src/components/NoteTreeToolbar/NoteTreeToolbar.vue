@@ -30,7 +30,7 @@
                     :key="option.value"
                     :aria-label="option.label"
                     :disabled="option.value === 'import'"
-                    @click="shareAction(option.value)"
+                    @click="shareAction(option.action)"
                 >
                     <font-awesome-icon :icon="option.icon"/>
                 </b-button>
@@ -75,12 +75,14 @@ export default {
                     {
                         icon: "file-import",
                         label: "Import notes",
-                        value: "import"
+                        value: "import",
+                        action: "importAll"
                     },
                     {
                         icon: "file-export",
                         label: "Export notes",
-                        value: "export"
+                        value: "export",
+                        action: "exportAll"
                     }
                 ]
             },
@@ -97,7 +99,7 @@ export default {
             this.$emit("changeNoteView", value);
         },
         shareAction(action) {
-            this.$emit("share", action);
+            this.$emit(action);
         },
         inputFilterValue() {
             this.$emit("filter", this.filter.value);

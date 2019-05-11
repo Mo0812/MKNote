@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
+import * as blobUtil from "blob-util";
 import CryptoUtil from "@/utils/CryptoUtil";
 import RemoteConnectionError from "@/error/RemoteConnectionError";
 
@@ -107,7 +108,24 @@ export default {
             throw error;
         }
     },
-    async export() {
+    async exportNote(id) {
+        try {
+            const doc = await db.get(id, {
+                attachments: true
+            });
+            doc.value = CryptoUtil.decryptString(doc.value);
+            console.log(doc);
+            const renderedDoc = await this._replaceAttachmentMarkerWithData(
+                doc
+            );
+            console.log(renderedDoc);
+            var blob = new Blob([renderedDoc.value], { type: "text/markdown" });
+            return blob;
+        } catch (error) {
+            throw error;
+        }
+    },
+    async exportAll() {
         try {
             const docs = await this.getNotes(false);
             const rawDocs = JSON.stringify(docs);
@@ -279,5 +297,29 @@ export default {
                 resolve("No cancelation needed");
             }
         });
+    },
+    async _replaceAttachmentMarkerWithData(doc) {
+        var content = doc.value;
+        const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
+        var match = regEx.exec(content);
+        while (match !== null) {
+            var identifier = match[2];
+            identifier = identifier.replace("note:", "");
+            var data = null;
+            var blob = null;
+            if ("_attachments" in doc && identifier in doc._attachments) {
+                const attachment = doc._attachments[identifier];
+                blob = blobUtil.base64StringToBlob(attachment.data);
+            } else {
+                blob = await this.getAttachment(doc._id, identifier);
+            }
+            data = await blobUtil.blobToDataURL(blob);
+            content = content.replace("note:" + identifier, data);
+            console.log(content);
+            match = regEx.exec(content);
+        }
+        doc.value = content;
+        console.log(doc);
+        return doc;
     }
 };

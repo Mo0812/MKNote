@@ -1,11 +1,14 @@
 <template>
-    <div>
+    <div class="note-tree-item-inner">
         <header class="d-flex w-100 justify-content-between">
             <h5>{{title}}</h5>
             <small>{{time}}</small>
         </header>
         <!--<p class="excerpt mb-1">{{excerpt}}</p>-->
-        <footer>
+        <footer class="button-bar">
+            <b-button variant="secondary" size="sm" @click="exportAction">
+                <font-awesome-icon icon="file-export"/>
+            </b-button>
             <b-button variant="danger" size="sm" @click="removeAction($event)">
                 <font-awesome-icon v-if="!remove.confirm" icon="trash"/>
                 <template v-else>{{$t("common.sure")}}</template>
@@ -24,6 +27,8 @@
     </div>
 </template>
 <script>
+import "./NoteTreeItem.scss";
+
 export default {
     name: "NoteTreeItem",
     props: ["title", "extra", "excerpt"],
@@ -40,6 +45,11 @@ export default {
         }
     },
     methods: {
+        async exportAction(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            this.$emit("exportNote");
+        },
         removeAction(evt) {
             evt.preventDefault();
             evt.stopPropagation();

@@ -114,11 +114,9 @@ export default {
                 attachments: true
             });
             doc.value = CryptoUtil.decryptString(doc.value);
-            console.log(doc);
             const renderedDoc = await this._replaceAttachmentMarkerWithData(
                 doc
             );
-            console.log(renderedDoc);
             var blob = new Blob([renderedDoc.value], { type: "text/markdown" });
             return blob;
         } catch (error) {
@@ -308,7 +306,6 @@ export default {
             var data = null;
             var blob = null;
             if ("_attachments" in doc && identifier in doc._attachments) {
-                console.log("here");
                 const attachment = doc._attachments[identifier];
                 blob = blobUtil.base64StringToBlob(
                     attachment.data,
@@ -317,12 +314,10 @@ export default {
 
                 data = await blobUtil.blobToDataURL(blob);
                 content = content.replace("note:" + identifier, data);
-                console.log(content);
             }
             match = regEx.exec(content);
         }
         doc.value = content;
-        console.log(doc);
         return doc;
     }
 };

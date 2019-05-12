@@ -308,14 +308,17 @@ export default {
             var data = null;
             var blob = null;
             if ("_attachments" in doc && identifier in doc._attachments) {
+                console.log("here");
                 const attachment = doc._attachments[identifier];
-                blob = blobUtil.base64StringToBlob(attachment.data);
-            } else {
-                blob = await this.getAttachment(doc._id, identifier);
+                blob = blobUtil.base64StringToBlob(
+                    attachment.data,
+                    attachment.content_type
+                );
+
+                data = await blobUtil.blobToDataURL(blob);
+                content = content.replace("note:" + identifier, data);
+                console.log(content);
             }
-            data = await blobUtil.blobToDataURL(blob);
-            content = content.replace("note:" + identifier, data);
-            console.log(content);
             match = regEx.exec(content);
         }
         doc.value = content;

@@ -1,11 +1,18 @@
 <template>
-    <div>
+    <div class="note-tree-item-inner">
         <header class="d-flex w-100 justify-content-between">
             <h5>{{title}}</h5>
             <small>{{time}}</small>
         </header>
         <!--<p class="excerpt mb-1">{{excerpt}}</p>-->
-        <footer>
+        <footer class="button-bar">
+            <b-dropdown size="sm">
+                <template slot="button-content">
+                    <font-awesome-icon icon="file-export"/>
+                </template>
+                <b-dropdown-item @click="exportAction($event, 'single')">Single file</b-dropdown-item>
+                <b-dropdown-item @click="exportAction($event, 'zip')">Zip archive</b-dropdown-item>
+            </b-dropdown>
             <b-button variant="danger" size="sm" @click="removeAction($event)">
                 <font-awesome-icon v-if="!remove.confirm" icon="trash"/>
                 <template v-else>{{$t("common.sure")}}</template>
@@ -24,6 +31,8 @@
     </div>
 </template>
 <script>
+import "./NoteTreeItem.scss";
+
 export default {
     name: "NoteTreeItem",
     props: ["title", "extra", "excerpt"],
@@ -40,6 +49,11 @@ export default {
         }
     },
     methods: {
+        async exportAction(evt, format) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            this.$emit("exportNote", format);
+        },
         removeAction(evt) {
             evt.preventDefault();
             evt.stopPropagation();

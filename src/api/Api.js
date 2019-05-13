@@ -1,11 +1,17 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
+import * as blobUtil from "blob-util";
 import CryptoUtil from "@/utils/CryptoUtil";
+import JSZip from "jszip";
 import RemoteConnectionError from "@/error/RemoteConnectionError";
 
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
+
+const EXPORT_DATA = 0;
+const EXPORT_URL = 1;
+
 const db = PouchDB("mknote-notes");
 const security = PouchDB("mknote-security");
 const settings = PouchDB("mknote-settings");
@@ -107,7 +113,45 @@ export default {
             throw error;
         }
     },
-    async export() {
+    async exportNote(id, distinctFileExport = false) {
+        try {
+            const doc = await db.get(id, {
+                attachments: true
+            });
+            doc.value = CryptoUtil.decryptString(doc.value);
+            if (distinctFileExport) {
+                const renderedDoc = await this._replaceAttachmentMarker(
+                    doc,
+                    EXPORT_URL
+                );
+
+                var zip = new JSZip();
+                zip.file(renderedDoc._id + ".md", renderedDoc.value);
+
+                const attachments = renderedDoc._attachments;
+                Object.keys(attachments).forEach(key => {
+                    const filename = key;
+                    const data = attachments[key].data;
+                    zip.file(filename, data, { base64: true });
+                });
+
+                var blob = await zip.generateAsync({ type: "blob" });
+                return blob;
+            } else {
+                const renderedDoc = await this._replaceAttachmentMarker(
+                    doc,
+                    EXPORT_DATA
+                );
+                var blob = new Blob([renderedDoc.value], {
+                    type: "text/markdown"
+                });
+                return blob;
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
+    async exportAll() {
         try {
             const docs = await this.getNotes(false);
             const rawDocs = JSON.stringify(docs);
@@ -279,5 +323,30 @@ export default {
                 resolve("No cancelation needed");
             }
         });
+    },
+    async _replaceAttachmentMarker(doc, option = EXPORT_DATA) {
+        var content = doc.value;
+        const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
+        var match = regEx.exec(content);
+        while (match !== null) {
+            var identifier = match[2];
+            identifier = identifier.replace("note:", "");
+            if ("_attachments" in doc && identifier in doc._attachments) {
+                const attachment = doc._attachments[identifier];
+                const blob = blobUtil.base64StringToBlob(
+                    attachment.data,
+                    attachment.content_type
+                );
+                if (option === EXPORT_DATA) {
+                    const data = await blobUtil.blobToDataURL(blob);
+                    content = content.replace("note:" + identifier, data);
+                } else if (option === EXPORT_URL) {
+                    content = content.replace("note:" + identifier, identifier);
+                }
+            }
+            match = regEx.exec(content);
+        }
+        doc.value = content;
+        return doc;
     }
 };

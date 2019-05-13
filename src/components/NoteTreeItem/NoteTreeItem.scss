@@ -1,0 +1,12 @@
+.note-tree-item-inner {
+    .button-bar {
+        .btn,
+        .btn-group {
+            margin-right: $spacing1;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

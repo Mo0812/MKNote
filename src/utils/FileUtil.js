@@ -1,5 +1,5 @@
 export default {
-    uploadFile(file) {
+    uploadFileAsDataUrl(file) {
         return new Promise((resolve, reject) => {
             var reader = new FileReader();
             reader.onload = function() {
@@ -8,6 +8,17 @@ export default {
             };
             reader.onerror = reject;
             reader.readAsDataURL(file);
+        });
+    },
+    uploadFileAsText(file, option) {
+        return new Promise((resolve, reject) => {
+            var reader = new FileReader();
+            reader.onload = function() {
+                const blob = reader.result;
+                resolve(blob);
+            };
+            reader.onerror = reject;
+            reader.readAsText(file);
         });
     },
     uploadDialog() {

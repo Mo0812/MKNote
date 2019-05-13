@@ -110,7 +110,7 @@ export default {
                             mime = file.type,
                             size = file.size;
 
-                        const blob = await FileUtil.uploadFile(file);
+                        const blob = await FileUtil.uploadFileAsDataUrl(file);
                         this.busy.progress = 20;
                         const processedBlob = await ImageUtil.processUploadImage(
                             blob,

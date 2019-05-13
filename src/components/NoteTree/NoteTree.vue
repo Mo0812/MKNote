@@ -173,16 +173,20 @@ export default {
                 "files" in evt.target &&
                 evt.target.files.length > 0
             ) {
-                const importFile = evt.target.files[0];
-                const importBlob = await FileUtil.uploadFile(importFile);
                 this._changeActionSheet({
                     content: "Import notes...",
                     busy: true,
                     actionShow: false
                 });
-                await Api.importAll(importBlob);
-                await this.$store.dispatch("initNotes");
-                this.action = this.defaultAction;
+                const importFile = evt.target.files[0];
+                try {
+                    await Api.importAll(importFile);
+                    await this.$store.dispatch("initNotes");
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.action = this.defaultAction;
+                }
             }
         },
         changeNoteView(viewMode) {

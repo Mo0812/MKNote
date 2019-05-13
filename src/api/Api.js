@@ -1,8 +1,9 @@
 import shortid from "shortid";
 import PouchDB from "pouchdb";
 import * as blobUtil from "blob-util";
-import CryptoUtil from "@/utils/CryptoUtil";
 import JSZip from "jszip";
+import CryptoUtil from "@/utils/CryptoUtil";
+import FileUtil from "@/utils/FileUtil";
 import RemoteConnectionError from "@/error/RemoteConnectionError";
 
 shortid.characters(
@@ -113,8 +114,20 @@ export default {
             throw error;
         }
     },
-    async importAll(blob) {
-        console.log(blob);
+    async importAll(data) {
+        var json = null;
+        if (data instanceof Blob) {
+            data = await FileUtil.uploadFileAsText(data);
+        }
+        json = JSON.parse(data);
+        try {
+            for (const doc of json) {
+                console.log(doc);
+                await db.put(doc);
+            }
+        } catch (error) {
+            throw error;
+        }
     },
     async exportNote(id, distinctFileExport = false) {
         try {

@@ -2,6 +2,7 @@ import shortid from "shortid";
 import PouchDB from "pouchdb";
 import * as blobUtil from "blob-util";
 import CryptoUtil from "@/utils/CryptoUtil";
+import JSZip from "jszip";
 import RemoteConnectionError from "@/error/RemoteConnectionError";
 
 shortid.characters(
@@ -108,17 +109,38 @@ export default {
             throw error;
         }
     },
-    async exportNote(id) {
+    async exportNote(id, distinctFileExport = false) {
         try {
             const doc = await db.get(id, {
                 attachments: true
             });
             doc.value = CryptoUtil.decryptString(doc.value);
-            const renderedDoc = await this._replaceAttachmentMarkerWithData(
-                doc
-            );
-            var blob = new Blob([renderedDoc.value], { type: "text/markdown" });
-            return blob;
+            if (distinctFileExport) {
+                const renderedDoc = await this._replaceAttachmentMarkerWithUrl(
+                    doc
+                );
+
+                var zip = new JSZip();
+                zip.file(renderedDoc._id + ".md", renderedDoc.value);
+
+                const attachments = renderedDoc._attachments;
+                Object.keys(attachments).forEach(key => {
+                    const filename = key;
+                    const data = attachments[key].data;
+                    zip.file(filename, data, { base64: true });
+                });
+
+                var blob = await zip.generateAsync({ type: "blob" });
+                return blob;
+            } else {
+                const renderedDoc = await this._replaceAttachmentMarkerWithData(
+                    doc
+                );
+                var blob = new Blob([renderedDoc.value], {
+                    type: "text/markdown"
+                });
+                return blob;
+            }
         } catch (error) {
             throw error;
         }
@@ -303,17 +325,30 @@ export default {
         while (match !== null) {
             var identifier = match[2];
             identifier = identifier.replace("note:", "");
-            var data = null;
-            var blob = null;
             if ("_attachments" in doc && identifier in doc._attachments) {
                 const attachment = doc._attachments[identifier];
-                blob = blobUtil.base64StringToBlob(
+                const blob = blobUtil.base64StringToBlob(
                     attachment.data,
                     attachment.content_type
                 );
 
-                data = await blobUtil.blobToDataURL(blob);
+                const data = await blobUtil.blobToDataURL(blob);
                 content = content.replace("note:" + identifier, data);
+            }
+            match = regEx.exec(content);
+        }
+        doc.value = content;
+        return doc;
+    },
+    async _replaceAttachmentMarkerWithUrl(doc) {
+        var content = doc.value;
+        const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
+        var match = regEx.exec(content);
+        while (match !== null) {
+            var identifier = match[2];
+            identifier = identifier.replace("note:", "");
+            if ("_attachments" in doc && identifier in doc._attachments) {
+                content = content.replace("note:" + identifier, identifier);
             }
             match = regEx.exec(content);
         }

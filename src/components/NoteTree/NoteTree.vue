@@ -30,7 +30,7 @@
                     :extra="note.created"
                     :excerpt="note.value"
                     @remove="removeNote(note._id, $event)"
-                    @exportNote="exportNote(note._id)"
+                    @exportNote="exportNote(note._id, $event)"
                 ></NoteTreeItem>
             </b-list-group-item>
         </b-list-group>
@@ -114,7 +114,8 @@ export default {
         _changeActionSheet(options) {
             Object.assign(this.action, options);
         },
-        async exportNote(id) {
+        async exportNote(id, format) {
+            console.log(id, format);
             this._changeActionSheet({
                 type: "exportNote",
                 show: true,
@@ -122,7 +123,7 @@ export default {
                 content: "Your note is getting prepared",
                 busy: true
             });
-            const blob = await Api.exportNote(id);
+            const blob = await Api.exportNote(id, format === "zip");
             this._changeActionSheet({
                 content: "You note is ready to download",
                 busy: false,

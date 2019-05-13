@@ -6,9 +6,13 @@
         </header>
         <!--<p class="excerpt mb-1">{{excerpt}}</p>-->
         <footer class="button-bar">
-            <b-button variant="secondary" size="sm" @click="exportAction">
-                <font-awesome-icon icon="file-export"/>
-            </b-button>
+            <b-dropdown size="sm">
+                <template slot="button-content">
+                    <font-awesome-icon icon="file-export"/>
+                </template>
+                <b-dropdown-item @click="exportAction($event, 'single')">Single file</b-dropdown-item>
+                <b-dropdown-item @click="exportAction($event, 'zip')">Zip archive</b-dropdown-item>
+            </b-dropdown>
             <b-button variant="danger" size="sm" @click="removeAction($event)">
                 <font-awesome-icon v-if="!remove.confirm" icon="trash"/>
                 <template v-else>{{$t("common.sure")}}</template>
@@ -45,10 +49,10 @@ export default {
         }
     },
     methods: {
-        async exportAction(evt) {
+        async exportAction(evt, format) {
             evt.preventDefault();
             evt.stopPropagation();
-            this.$emit("exportNote");
+            this.$emit("exportNote", format);
         },
         removeAction(evt) {
             evt.preventDefault();

@@ -74,9 +74,6 @@ const actions = {
             const remote = await Api.getRemote();
             context.commit("REMOTE", remote);
             await Api.updateRemoteConnections(remote.enabled, remote.url);
-
-            const settings = await Api.getSettings();
-            context.commit("SETTINGS", settings);
         } catch (error) {
             console.log("no remote found");
         }

@@ -8,6 +8,10 @@ import RemoteConnectionError from "@/error/RemoteConnectionError";
 shortid.characters(
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@"
 );
+
+const EXPORT_DATA = 0;
+const EXPORT_URL = 1;
+
 const db = PouchDB("mknote-notes");
 const security = PouchDB("mknote-security");
 const settings = PouchDB("mknote-settings");
@@ -116,8 +120,9 @@ export default {
             });
             doc.value = CryptoUtil.decryptString(doc.value);
             if (distinctFileExport) {
-                const renderedDoc = await this._replaceAttachmentMarkerWithUrl(
-                    doc
+                const renderedDoc = await this._replaceAttachmentMarker(
+                    doc,
+                    EXPORT_URL
                 );
 
                 var zip = new JSZip();
@@ -133,8 +138,9 @@ export default {
                 var blob = await zip.generateAsync({ type: "blob" });
                 return blob;
             } else {
-                const renderedDoc = await this._replaceAttachmentMarkerWithData(
-                    doc
+                const renderedDoc = await this._replaceAttachmentMarker(
+                    doc,
+                    EXPORT_DATA
                 );
                 var blob = new Blob([renderedDoc.value], {
                     type: "text/markdown"
@@ -318,7 +324,7 @@ export default {
             }
         });
     },
-    async _replaceAttachmentMarkerWithData(doc) {
+    async _replaceAttachmentMarker(doc, option = EXPORT_DATA) {
         var content = doc.value;
         const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
         var match = regEx.exec(content);
@@ -331,24 +337,12 @@ export default {
                     attachment.data,
                     attachment.content_type
                 );
-
-                const data = await blobUtil.blobToDataURL(blob);
-                content = content.replace("note:" + identifier, data);
-            }
-            match = regEx.exec(content);
-        }
-        doc.value = content;
-        return doc;
-    },
-    async _replaceAttachmentMarkerWithUrl(doc) {
-        var content = doc.value;
-        const regEx = /(?:!\[(.*?)\]\(note:(.*?)\))/gm;
-        var match = regEx.exec(content);
-        while (match !== null) {
-            var identifier = match[2];
-            identifier = identifier.replace("note:", "");
-            if ("_attachments" in doc && identifier in doc._attachments) {
-                content = content.replace("note:" + identifier, identifier);
+                if (option === EXPORT_DATA) {
+                    const data = await blobUtil.blobToDataURL(blob);
+                    content = content.replace("note:" + identifier, data);
+                } else if (option === EXPORT_URL) {
+                    content = content.replace("note:" + identifier, identifier);
+                }
             }
             match = regEx.exec(content);
         }

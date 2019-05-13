@@ -10,6 +10,13 @@
             :actionContent="action.actionContent"
             @action="alertAction"
         />
+        <input
+            v-if="action.type === 'import' && action.show"
+            type="file"
+            class="import-file-dialog"
+            ref="importFileDialog"
+            @change="importCommitFile"
+        >
         <NoteTreeToolbar
             @addNote="addNote"
             @changeNoteView="changeNoteView"
@@ -115,7 +122,6 @@ export default {
             Object.assign(this.action, options);
         },
         async exportNote(id, format) {
-            console.log(id, format);
             this._changeActionSheet({
                 type: "exportNote",
                 show: true,
@@ -161,6 +167,24 @@ export default {
                 actionContent: "Choose import file"
             });
         },
+        async importCommitFile(evt) {
+            if (
+                "target" in evt &&
+                "files" in evt.target &&
+                evt.target.files.length > 0
+            ) {
+                const importFile = evt.target.files[0];
+                const importBlob = await FileUtil.uploadFile(importFile);
+                this._changeActionSheet({
+                    content: "Import notes...",
+                    busy: true,
+                    actionShow: false
+                });
+                await Api.importAll(importBlob);
+                await this.$store.dispatch("initNotes");
+                this.action = this.defaultAction;
+            }
+        },
         changeNoteView(viewMode) {
             this.$emit("changeNoteView", viewMode);
         },
@@ -173,8 +197,7 @@ export default {
                     this.action = this.defaultAction;
                     break;
                 case "import":
-                    FileUtil.uploadDialog();
-                    break;
+                    this.$refs["importFileDialog"].click();
             }
         },
         filterAction(value) {

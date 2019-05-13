@@ -24,6 +24,7 @@ export default {
 
         var ev = new MouseEvent("click", {});
         input.dispatchEvent(ev);
+        return input;
         //document.body.removeChild(div);
     },
     downloadBlob(blob) {

@@ -29,7 +29,6 @@
                     v-for="option in share.options"
                     :key="option.value"
                     :aria-label="option.label"
-                    :disabled="option.value === 'import'"
                     @click="shareAction(option.action)"
                 >
                     <font-awesome-icon :icon="option.icon"/>

@@ -4,6 +4,10 @@
 
     border-right: 1px solid $bgBorder;
 
+    .import-file-dialog {
+        display: none;
+    }
+
     .note-tree-list {
         height: 100%;
         max-height: 80vh;

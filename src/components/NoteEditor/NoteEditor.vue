@@ -25,7 +25,9 @@
             <textarea id="md-textarea" ref="mdtextarea"/>
         </div>
         <div v-else class="note-editor-container">
-            <b-row class="h-100 justify-content-center align-items-center text-center">
+            <b-row
+                class="h-100 justify-content-center align-items-center text-center note-empty-message"
+            >
                 <b-col cols="12">
                     <h3>{{$t("notes.editor.emptyMessage")}}</h3>
                 </b-col>

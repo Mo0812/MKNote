@@ -113,6 +113,9 @@ export default {
             throw error;
         }
     },
+    async importAll(blob) {
+        console.log(blob);
+    },
     async exportNote(id, distinctFileExport = false) {
         try {
             const doc = await db.get(id, {
